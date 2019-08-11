@@ -2,7 +2,9 @@ const Sequelize = require('sequelize');
 const sequelize = require('../databases/database').sequelize;
 const Op = require('../databases/database').Op;
 
-const Post = sequelize.define('user', {
+const Post = require('./Post');
+
+const User = sequelize.define('user', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -29,4 +31,8 @@ const Post = sequelize.define('user', {
 }, {
         timestamps: false,
     });
+
+User.hasMany(Post, { foreignKey: 'userid', sourceKey: 'id' });
+Post.belongsTo(User, { foreignKey: 'userid', targetKey: 'id' });
+
 module.exports = User;

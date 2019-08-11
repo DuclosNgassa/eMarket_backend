@@ -2,31 +2,22 @@ const Sequelize = require('sequelize');
 const sequelize = require('../databases/database').sequelize;
 const Op = require('../databases/database').Op;
 
-const Post = sequelize.define('user', {
+const Image = sequelize.define('image', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    name: {
+    image_url: {
         type: Sequelize.STRING(50),
     },
-    email: {
-        type: Sequelize.STRING,
-    },
-    phone_number: {
-        type: Sequelize.STRING,
-    },
-    createdAt: {
+    created_at: {
         type: Sequelize.DATE
     },
-    rating: {
+    postid:{
         type: Sequelize.INTEGER
-    },
-    status: {
-        type: Sequelize.ENUM('active', 'blocked')
     },
 }, {
         timestamps: false,
     });
-module.exports = User;
+module.exports = Image;
