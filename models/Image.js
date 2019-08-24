@@ -14,7 +14,7 @@ const Image = sequelize.define('images', {
     created_at: {
         type: Sequelize.DATE
     },
-    postid:{
+    postid: {
         type: Sequelize.INTEGER
     },
 }, {
