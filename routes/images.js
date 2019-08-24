@@ -176,26 +176,26 @@ router.get('/:id', async (req, res, next) => {
 });
 
 //Query Image by given postid
-router.get('/parent/:postid', async (req, res, next) => {
+router.get('/post/:postid', async (req, res, next) => {
     const {postid} = req.params;
     try {
-        let categories = await Categorie.findAll({
+        let images = await Image.findAll({
             attributes: ['id', 'image_url', 'created_at', 'postid'],
             where: {
                 postid: postid
             },
         });
-        if (categories.length > 0) {
+        if (images.length > 0) {
             res.json({
                 result: 'ok',
-                data: categories,
-                message: "Query Categorie by parentid successfully"
+                data: images,
+                message: "Query Categorie by postid successfully"
             });
         } else {
             res.json({
                 result: 'failed',
                 data: [],
-                message: "Query Categorie by parentid failed. Error"
+                message: "Query Categorie by postid failed. Error"
             });
         }
 
@@ -203,7 +203,7 @@ router.get('/parent/:postid', async (req, res, next) => {
         res.json({
             result: 'failed',
             data: {},
-            message: `Query Categorie by parentid failed. Error ${error}`
+            message: `Query Categorie by postid failed. Error ${error}`
         });
     }
 });

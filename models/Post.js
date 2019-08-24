@@ -25,6 +25,9 @@ const Post = sequelize.define('posts', {
     fee: {
         type: Sequelize.NUMBER
     },
+    fee_typ: {
+        type: Sequelize.ENUM('negotiable', 'fixed', 'gift')
+    },
     city: {
         type: Sequelize.STRING(50)
     },
