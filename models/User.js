@@ -4,7 +4,7 @@ const Op = require('../databases/database').Op;
 
 const Post = require('./Post');
 
-const User = sequelize.define('user', {
+const User = sequelize.define('users', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -19,13 +19,13 @@ const User = sequelize.define('user', {
     phone_number: {
         type: Sequelize.STRING,
     },
-    createdAt: {
+    created_at: {
         type: Sequelize.DATE
     },
     rating: {
         type: Sequelize.INTEGER
     },
-    status: {
+    user_status: {
         type: Sequelize.ENUM('active', 'blocked')
     },
 }, {

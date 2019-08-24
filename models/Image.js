@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const sequelize = require('../databases/database').sequelize;
 const Op = require('../databases/database').Op;
 
-const Image = sequelize.define('image', {
+const Image = sequelize.define('images', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,

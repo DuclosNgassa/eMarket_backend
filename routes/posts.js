@@ -3,7 +3,7 @@ const router = express.Router();
 
 const Post = require('../models/Post');
 const User = require('../models/User');
-const Categorie = require('../models/Categories');
+const Categorie = require('../models/Categorie');
 const Image = require('../models/Image');
 
 //Insert

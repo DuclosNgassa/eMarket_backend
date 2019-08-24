@@ -4,7 +4,7 @@ const Op = require('../databases/database').Op;
 
 const Post = require('./Post');
 
-const Categories = sequelize.define('categories', {
+const Categorie = sequelize.define('categories', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true
@@ -19,10 +19,10 @@ const Categories = sequelize.define('categories', {
         timestamps: false,
     });
 
-Categories.hasMany(Categories, { foreignKey: 'parentid', sourceKey: 'id' });
-Categories.belongsTo(Categories, { foreignKey: 'parentid', targetKey: 'id' });
+Categorie.hasMany(Categorie, { foreignKey: 'parentid', sourceKey: 'id' });
+Categorie.belongsTo(Categorie, { foreignKey: 'parentid', targetKey: 'id' });
 
-Categories.hasMany(Post, { foreignKey: 'categorieid', sourceKey: 'id' });
-Post.belongsTo(Categories, { foreignKey: 'categorieid', targetKey: 'id' });
+Categorie.hasMany(Post, { foreignKey: 'categorieid', sourceKey: 'id' });
+Post.belongsTo(Categorie, { foreignKey: 'categorieid', targetKey: 'id' });
 
-module.exports = Categories;
+module.exports = Categorie;
