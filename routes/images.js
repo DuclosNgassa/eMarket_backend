@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
 
 const Image = require('../models/Image');
 //const Post = require('../models/Post');
@@ -208,4 +210,34 @@ router.get('/post/:postid', async (req, res, next) => {
     }
 });
 
+//Set storage engine
+const Storage = multer.diskStorage({
+    destination: './public/images/',
+    filename: (req, file, cb) => {
+        const fileName = file.originalname.split('.')[0] +
+            '-' +
+            Date.now() +
+            path.extname(file.originalname);
+        cb(null, fileName);
+    }
+});
+
+const upload = multer({
+    limit: 10 * 1024 * 1024,
+    storage: Storage
+}).single('image');
+
+router.post('/upload', (req, res, next) => {
+    upload(req, res, err => {
+        if (err) {
+            return res.status(500).json({ message: err.message });
+        }
+
+        const p = req.file.path
+            .split(path.sep)
+            .slice(1)
+            .join('/');
+        res.status(200).json({ path: p });
+    });
+});
 module.exports = router;
