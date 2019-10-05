@@ -9,9 +9,10 @@ router.post('/', async (req, res, next) => {
     try {
         let newCategorie = await Categorie.create({
             title,
-            parentid
+            parentid,
+            icon
         }, {
-            fields: ["title", "parentid"]
+            fields: ["title", "parentid", "icon"]
         });
         if (newCategorie) {
             res.send({
@@ -40,7 +41,7 @@ router.put('/:id', async (req, res, next) => {
     const {title, parentid} = req.body;
     try {
         let categories = await Categorie.findAll({
-            attributes: ['id', 'title', 'parentid'],
+            attributes: ['id', 'title', 'parentid', 'icon'],
             where: {
                 id
             }
@@ -107,7 +108,7 @@ router.delete('/:id', async (req, res, next) => {
 router.get('/', async (req, res, next) => {
     try {
         const categories = await Categorie.findAll({
-            attributes: ['id', 'title', 'parentid'],
+            attributes: ['id', 'title', 'parentid', 'icon'],
         });
         res.json({
             result: 'ok',
@@ -130,7 +131,7 @@ router.get('/:id', async (req, res, next) => {
     const {id} = req.params;
     try {
         let categories = await Categorie.findAll({
-            attributes: ['id', 'title', 'parentid'],
+            attributes: ['id', 'title', 'parentid', 'icon'],
             where: {
                 id: id
             },
@@ -173,7 +174,7 @@ router.get('/parent/:parentid', async (req, res, next) => {
     const {parentid} = req.params;
     try {
         let categories = await Categorie.findAll({
-            attributes: ['id', 'title', 'parentid'],
+            attributes: ['id', 'title', 'parentid', 'icon'],
             where: {
                 parentid: parentid
             },

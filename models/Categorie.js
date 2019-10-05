@@ -14,6 +14,9 @@ const Categorie = sequelize.define('categories', {
     },
     parentid: {
         type: Sequelize.INTEGER
+    },
+    icon: {
+        type: Sequelize.STRING(50),
     }
 }, {
         timestamps: false,

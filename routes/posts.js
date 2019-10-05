@@ -16,8 +16,8 @@ router.post('/', async (req, res, next) => {
             fee_typ,
             city,
             quartier,
-            status,
-            rating,
+            status: "created",
+            rating: 5,
             userid,
             categorieid
         }, {
