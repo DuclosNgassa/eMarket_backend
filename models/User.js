@@ -32,7 +32,7 @@ const User = sequelize.define('users', {
     timestamps: false,
 });
 
-User.hasMany(Post, { foreignKey: 'userid', sourceKey: 'id' });
-Post.belongsTo(User, { foreignKey: 'userid', targetKey: 'id' });
+User.hasMany(Post, { foreignKey: 'useremail', sourceKey: 'email' });
+Post.belongsTo(User, { foreignKey: 'useremail', targetKey: 'email' });
 
 module.exports = User;

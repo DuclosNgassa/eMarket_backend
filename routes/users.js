@@ -7,6 +7,7 @@ const User = require('../models/User');
 //Insert User
 router.post('/', async (req, res, next) => {
     const {name, email, phone_number, created_at, rating, user_status} = req.body;
+    console.log('Create user');
     try {
         let newUser = await User.create({
             name,
@@ -87,16 +88,6 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
     const {id} = req.params;
     try {
-
-/*
-        await Post.destroy(
-            {
-                where: {
-                    userid: id
-                }
-            });
-*/
-
         let numberOfdeletedRows = await User.destroy({
             where: {
                 id
@@ -147,16 +138,6 @@ router.get('/:id', async (req, res, next) => {
             where: {
                 id: id
             },
-            /*
-                        include: [
-                            {
-                                model: User,
-                                as: 'subcategory',
-                                nested:true,
-                                required: false
-                            }
-                        ]
-            */
         });
         if (users.length > 0) {
             res.json({
@@ -177,6 +158,39 @@ router.get('/:id', async (req, res, next) => {
             result: 'failed',
             data: {},
             message: `Query User by id failed. Error ${error}`
+        });
+    }
+});
+
+router.get('/email/:email', async (req, res, next) => {
+    const {email} = req.params;
+    console.log('Find user');
+    try {
+        let users = await User.findAll({
+          attributes: ['id', 'name', 'email', 'phone_number', 'created_at', 'rating', 'user_status'],
+            where: {
+                email: email
+            },
+        });
+        if (users.length > 0) {
+            res.json({
+                result: 'ok',
+                data: users[0],
+                message: "Query User by email successfully"
+            });
+        } else {
+            res.json({
+                result: 'failed',
+                data: {},
+                message: "Query User by email failed. Error"
+            });
+        }
+
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: {},
+            message: `Query User by email failed. Error ${error}`
         });
     }
 });

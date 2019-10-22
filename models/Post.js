@@ -40,12 +40,15 @@ const Post = sequelize.define('posts', {
     rating: {
         type: Sequelize.INTEGER
     },
-    userid:{
-        type: Sequelize.INTEGER
+    useremail:{
+        type: Sequelize.STRING(100)
     },
     categorieid:{
         type: Sequelize.INTEGER
-    }
+    },
+    phone_number: {
+        type: Sequelize.STRING,
+    },
 },{
     timestamps: false,
 });

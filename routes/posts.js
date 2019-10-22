@@ -5,7 +5,7 @@ const Post = require('../models/Post');
 
 //Insert Post
 router.post('/', async (req, res, next) => {
-    const {title, created_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, userid, categorieid} = req.body;
+    const {title, created_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number} = req.body;
     try {
         let newPost = await Post.create({
             title,
@@ -18,10 +18,11 @@ router.post('/', async (req, res, next) => {
             quartier,
             status: "created",
             rating: 5,
-            userid,
-            categorieid
+            useremail,
+            categorieid,
+            phone_number
         }, {
-            fields: ["title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "userid", "categorieid"]
+            fields: ["title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"]
         });
         if (newPost) {
             res.send({
@@ -47,10 +48,10 @@ router.post('/', async (req, res, next) => {
 //Update Post
 router.put('/:id', async (req, res, next) => {
     const {id} = req.params;
-    const {title, created_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, userid, categorieid} = req.body;
+    const {title, created_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number} = req.body;
     try {
         let posts = await Post.findAll({
-            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "userid", "categorieid"],
+            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
             where: {
                 id
             }
@@ -69,8 +70,9 @@ router.put('/:id', async (req, res, next) => {
                         quartier: quartier ? quartier : post.quartier,
                         status: status ? status : post.status,
                         rating: rating ? rating : post.rating,
-                        userid: userid ? userid : post.userid,
-                        categorieid: categorieid ? categorieid : post.categorieid
+                        useremail: useremail ? useremail : post.useremail,
+                        categorieid: categorieid ? categorieid : post.categorieid,
+                        phone_number: phone_number? phone_number : post.phone_number
                     });
                 });
             res.json({
@@ -98,16 +100,6 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
     const {id} = req.params;
     try {
-
-        /*
-                await Post.destroy(
-                    {
-                        where: {
-                            postid: id
-                        }
-                    });
-        */
-
         let numberOfdeletedRows = await Post.destroy({
             where: {
                 id
@@ -131,7 +123,7 @@ router.delete('/:id', async (req, res, next) => {
 router.get('/', async (req, res, next) => {
     try {
         const posts = await Post.findAll({
-            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "userid", "categorieid"],
+            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
         });
         res.json({
             result: 'ok',
@@ -154,20 +146,10 @@ router.get('/:id', async (req, res, next) => {
     const {id} = req.params;
     try {
         let posts = await Post.findAll({
-            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "userid", "categorieid"],
+            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
             where: {
                 id: id
             },
-            /*
-                        include: [
-                            {
-                                model: Post,
-                                as: 'subcategory',
-                                nested:true,
-                                required: false
-                            }
-                        ]
-            */
         });
         if (posts.length > 0) {
             res.json({
@@ -192,27 +174,27 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-//Query Posts by given userId
-router.get('/user/:userid', async (req, res, next) => {
-    const {userid} = req.params;
+//Query Posts by given useremail
+router.get('/user/:useremail', async (req, res, next) => {
+    const {useremail} = req.params;
     try {
         let posts = await Post.findAll({
-            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "userid", "categorieid"],
+            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
             where: {
-                userid: userid
+                useremail: useremail
             },
         });
         if (posts.length > 0) {
             res.json({
                 result: 'ok',
                 data: posts,
-                message: "Query Post by userid successfully"
+                message: "Query Post by useremail successfully"
             });
         } else {
             res.json({
                 result: 'failed',
                 data: [],
-                message: "Query Post by userid failed. Error"
+                message: "Query Post by useremail failed. Error"
             });
         }
 
@@ -220,7 +202,7 @@ router.get('/user/:userid', async (req, res, next) => {
         res.json({
             result: 'failed',
             data: {},
-            message: `Query Post by userid failed. Error ${error}`
+            message: `Query Post by useremail failed. Error ${error}`
         });
     }
 });
@@ -230,7 +212,7 @@ router.get('/categorie/:categorieid', async (req, res, next) => {
     const {categorieid} = req.params;
     try {
         let posts = await Post.findAll({
-            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "userid", "categorieid"],
+            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
             where: {
                 categorieid: categorieid
             },
