@@ -135,16 +135,6 @@ router.get('/:id', async (req, res, next) => {
             where: {
                 id: id
             },
-/*
-            include: [
-                {
-                    model: Categorie,
-                    as: 'subcategory',
-                    nested:true,
-                    required: false
-                }
-            ]
-*/
         });
         if (categories.length > 0) {
             res.json({

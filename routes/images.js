@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 const Image = require('../models/Image');
 //const Post = require('../models/Post');
@@ -83,15 +84,19 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
     const {id} = req.params;
     try {
+        let images = await Image.findAll({
+            attributes: ['id', 'image_url', 'created_at', 'postid'],
+            where: {
+                id: id
+            },
+        });
 
-        /*
-                await Post.destroy(
-                    {
-                        where: {
-                            imageid: id
-                        }
-                    });
-        */
+        images.forEach(image => {
+            let filePath = image.image_url.split('/images')[1];
+            filePath = './public/images' + filePath;
+            console.log('Imagepath: ' + filePath);
+            fs.unlinkSync(filePath);
+        });
 
         let numberOfdeletedRows = await Image.destroy({
             where: {
@@ -107,6 +112,61 @@ router.delete('/:id', async (req, res, next) => {
         res.json({
             result: 'failed',
             message: `Delete a Image failed. Error ${error}`,
+            count: numberOfdeletedRows
+        });
+    }
+});
+
+//delete a Image by given postid
+router.delete('/post/:postid', async (req, res, next) => {
+    const {postid} = req.params;
+    try {
+        let images = await Image.findAll({
+            attributes: ['id', 'image_url', 'created_at', 'postid'],
+            where: {
+                postid: postid
+            },
+        });
+
+        images.forEach(image => {
+            let filePath = image.image_url.split('/images')[1];
+            filePath = './public/images/' + filePath;
+            console.log('Imagepath: ' + filePath);
+            fs.unlinkSync(filePath);
+        });
+
+        let numberOfdeletedRows = await Image.destroy({
+            where: {
+                postid
+            }
+        });
+        res.json({
+            result: 'ok',
+            message: 'Delete a Image successfully',
+            count: numberOfdeletedRows
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            message: `Delete a Image failed. Error ${error}`,
+            count: numberOfdeletedRows
+        });
+    }
+});
+
+//delete a Image from server
+router.delete('/server/:filePath', async (req, res, next) => {
+    const {filePath} = req.params;
+    try {
+        fs.unlinkSync(filePath);
+        res.json({
+            result: 'ok',
+            message: 'Delete image on server successfully',
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            message: `Delete image on server failed. Error ${error}`,
             count: numberOfdeletedRows
         });
     }
@@ -143,16 +203,6 @@ router.get('/:id', async (req, res, next) => {
             where: {
                 id: id
             },
-            /*
-                        include: [
-                            {
-                                model: Image,
-                                as: 'subcategory',
-                                nested:true,
-                                required: false
-                            }
-                        ]
-            */
         });
         if (images.length > 0) {
             res.json({
@@ -230,14 +280,14 @@ const upload = multer({
 router.post('/upload', (req, res, next) => {
     upload(req, res, err => {
         if (err) {
-            return res.status(500).json({ message: err.message });
+            return res.status(500).json({message: err.message});
         }
 
         const p = req.file.path
             .split(path.sep)
             .slice(1)
             .join('/');
-        res.status(200).json({ path: p });
+        res.status(200).json({path: p});
     });
 });
 module.exports = router;
