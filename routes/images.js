@@ -74,7 +74,7 @@ router.put('/:id', async (req, res, next) => {
     } catch (error) {
         res.json({
             result: 'failed',
-            data: images,
+            data: null,
             message: `Cannot find image to update. Error: ${error}`
         });
     }

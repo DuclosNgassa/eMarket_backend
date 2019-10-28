@@ -49,48 +49,44 @@ router.post('/', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
     const {id} = req.params;
     const {title, created_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number} = req.body;
-    try {
-        let posts = await Post.findAll({
+   try {
+        let post = await Post.findOne({
+            where: {id: id},
             attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
-            where: {
-                id
-            }
-        });
-        if (posts.length > 0) {
-            posts.forEach(
-                async (post) => {
-                    await post.update({
-                        title: title ? title : post.title,
-                        created_at: created_at ? created_at : post.created_at,
-                        post_typ: post_typ ? post_typ : post.post_typ,
-                        description: description ? description : post.description,
-                        fee: fee ? fee : post.fee,
-                        fee_typ: fee_typ ? fee_typ : post.fee_typ,
-                        city: city ? city : post.city,
-                        quartier: quartier ? quartier : post.quartier,
-                        status: status ? status : post.status,
-                        rating: rating ? rating : post.rating,
-                        useremail: useremail ? useremail : post.useremail,
-                        categorieid: categorieid ? categorieid : post.categorieid,
-                        phone_number: phone_number? phone_number : post.phone_number
-                    });
-                });
+        }).then(async post => {
+            await post.update({
+                title: title ? title : post.title,
+                created_at: created_at ? created_at : post.created_at,
+                post_typ: post_typ ? post_typ : post.post_typ,
+                description: description ? description : post.description,
+                fee: fee ? fee : post.fee,
+                fee_typ: fee_typ ? fee_typ : post.fee_typ,
+                city: city ? city : post.city,
+                quartier: quartier ? quartier : post.quartier,
+                status: status ? status : post.status,
+                rating: rating ? rating : post.rating,
+                useremail: useremail ? useremail : post.useremail,
+                categorieid: categorieid ? categorieid : post.categorieid,
+                phone_number: phone_number ? phone_number : post.phone_number
+            });
+
             res.json({
                 result: 'ok',
-                data: posts,
+                data: post,
                 message: 'Update post successfully'
             });
-        } else {
-            res.json({
-                result: 'failed',
-                data: posts,
-                message: "Cannot find post to update"
-            });
-        }
+        });
+/*
+        res.json({
+            result: 'failed',
+            data: post,
+            message: "Cannot find post to update"
+        });
+*/
     } catch (error) {
         res.json({
             result: 'failed',
-            data: posts,
+            data: null,
             message: `Cannot find post to update. Error: ${error}`
         });
     }
