@@ -3,6 +3,8 @@ const sequelize = require('../databases/database').sequelize;
 const Op = require('../databases/database').Op;
 
 const Image = require('./Image');
+const Favorit = require('./Favorit');
+const Message = require('./Message');
 
 const Post = sequelize.define('posts', {
     id: {
@@ -55,5 +57,11 @@ const Post = sequelize.define('posts', {
 
 Post.hasMany(Image, { foreignKey: 'postid', sourceKey: 'id' });
 Image.belongsTo(Post, { foreignKey: 'postid', targetKey: 'id' });
+
+Post.hasMany(Favorit, { foreignKey: 'postid', sourceKey: 'id' });
+Favorit.belongsTo(Post, { foreignKey: 'postid', targetKey: 'id' });
+
+Post.hasMany(Message, { foreignKey: 'postid', sourceKey: 'id' });
+Message.belongsTo(Post, { foreignKey: 'postid', targetKey: 'id' });
 
 module.exports = Post;
