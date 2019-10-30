@@ -39,6 +39,79 @@ router.post('/', async (req, res, next) => {
     }
 });
 
+//Query all Users from DB
+router.get('/', async (req, res, next) => {
+    try {
+        const users = await User.findAll({
+          attributes: ['id', 'name', 'email', 'phone_number', 'created_at', 'rating', 'user_status'],
+        }).then(users => {
+            res.json({
+                result: 'ok',
+                data: users,
+                length: users.length,
+                message: "Query list of Users successfully"
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: [],
+            length: 0,
+            message: `Query list of Users failed. Error ${error}`
+        });
+    }
+});
+
+//Query User by given id
+router.get('/:id', async (req, res, next) => {
+    const {id} = req.params;
+    try {
+        await User.findOne({
+            attributes: ['id', 'name', 'email', 'phone_number', 'created_at', 'rating', 'user_status'],
+            where: {
+                id: id
+            },
+        }).then(user => {
+            res.json({
+                result: 'ok',
+                data: user,
+                message: "Query User by email successfully"
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: {},
+            message: `Query User by id failed. Error ${error}`
+        });
+    }
+});
+
+router.get('/email/:email', async (req, res, next) => {
+    const {email} = req.params;
+    console.log('Find user by email');
+    try {
+        await User.findOne({
+          attributes: ['id', 'name', 'email', 'phone_number', 'created_at', 'rating', 'user_status'],
+            where: {
+                email: email
+            },
+        }).then(user => {
+            res.json({
+                result: 'ok',
+                data: user,
+                message: "Query User by email successfully"
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: null,
+            message: `Query User by email failed. Error ${error}`
+        });
+    }
+});
+
 //Update User
 router.put('/:id', async (req, res, next) => {
     const {id} = req.params;
@@ -54,12 +127,12 @@ router.put('/:id', async (req, res, next) => {
             users.forEach(
                 async (user) => {
                     await user.update({
-                      name: name ? name : user.name,
-                      email: email ? email : user.email,
-                      phone_number: phone_number ? phone_number : user.phone_number,
-                      created_at: created_at ? created_at : user.created_at,
-                      rating: rating ? rating : user.rating,
-                      user_status: user_status ? user_status : user.user_status,
+                        name: name ? name : user.name,
+                        email: email ? email : user.email,
+                        phone_number: phone_number ? phone_number : user.phone_number,
+                        created_at: created_at ? created_at : user.created_at,
+                        rating: rating ? rating : user.rating,
+                        user_status: user_status ? user_status : user.user_status,
                     });
                 });
             res.json({
@@ -83,7 +156,7 @@ router.put('/:id', async (req, res, next) => {
     }
 });
 
-//Delete a User
+//Delete a User by id
 router.delete('/:id', async (req, res, next) => {
     const {id} = req.params;
     try {
@@ -94,102 +167,37 @@ router.delete('/:id', async (req, res, next) => {
         });
         res.json({
             result: 'ok',
-            message: 'Delete a User successfully',
+            message: 'Delete a User by id successfully',
             count: numberOfdeletedRows
         });
     } catch (error) {
         res.json({
             result: 'failed',
-            message: `Delete a User failed. Error ${error}`,
+            message: `Delete a User by id failed. Error ${error}`,
             count: numberOfdeletedRows
         });
     }
 });
 
-//Query all Users from DB
-router.get('/', async (req, res, next) => {
+//Delete a User by email
+router.delete('/email/:email', async (req, res, next) => {
+    const {email} = req.params;
     try {
-        const users = await User.findAll({
-          attributes: ['id', 'name', 'email', 'phone_number', 'created_at', 'rating', 'user_status'],
+        let numberOfdeletedRows = await User.destroy({
+            where: {
+                email
+            }
         });
         res.json({
             result: 'ok',
-            data: users,
-            length: users.length,
-            message: "Query list of Users successfully"
+            message: 'Delete a User by email successfully',
+            count: numberOfdeletedRows
         });
     } catch (error) {
         res.json({
             result: 'failed',
-            data: [],
-            length: 0,
-            message: `Query list of Users failed. Error ${error}`
-        });
-    }
-});
-
-//Query User by given id
-router.get('/:id', async (req, res, next) => {
-    const {id} = req.params;
-    try {
-        let users = await User.findAll({
-          attributes: ['id', 'name', 'email', 'phone_number', 'created_at', 'rating', 'user_status'],
-            where: {
-                id: id
-            },
-        });
-        if (users.length > 0) {
-            res.json({
-                result: 'ok',
-                data: users[0],
-                message: "Query User by id successfully"
-            });
-        } else {
-            res.json({
-                result: 'failed',
-                data: {},
-                message: "Query User by id failed. Error"
-            });
-        }
-
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            data: {},
-            message: `Query User by id failed. Error ${error}`
-        });
-    }
-});
-
-router.get('/email/:email', async (req, res, next) => {
-    const {email} = req.params;
-    console.log('Find user');
-    try {
-        let users = await User.findAll({
-          attributes: ['id', 'name', 'email', 'phone_number', 'created_at', 'rating', 'user_status'],
-            where: {
-                email: email
-            },
-        });
-        if (users.length > 0) {
-            res.json({
-                result: 'ok',
-                data: users[0],
-                message: "Query User by email successfully"
-            });
-        } else {
-            res.json({
-                result: 'failed',
-                data: {},
-                message: "Query User by email failed. Error"
-            });
-        }
-
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            data: {},
-            message: `Query User by email failed. Error ${error}`
+            message: `Delete a User by email failed. Error ${error}`,
+            count: numberOfdeletedRows
         });
     }
 });
