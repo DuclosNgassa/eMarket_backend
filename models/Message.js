@@ -20,7 +20,7 @@ const Message = sequelize.define('messages', {
     postid: {
         type: Sequelize.INTEGER
     },
-    message: {
+    body: {
         type: Sequelize.STRING(1000)
     },
 

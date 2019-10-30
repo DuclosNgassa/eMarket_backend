@@ -5,11 +5,12 @@ const Post = require('../models/Post');
 
 //Insert Post
 router.post('/', async (req, res, next) => {
-    const {title, created_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number} = req.body;
+    const {title, created_at, updated_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number} = req.body;
     try {
         let newPost = await Post.create({
             title,
             created_at,
+            updated_at,
             post_typ,
             description,
             fee,
@@ -22,7 +23,7 @@ router.post('/', async (req, res, next) => {
             categorieid,
             phone_number
         }, {
-            fields: ["title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"]
+            fields: ["title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"]
         });
         if (newPost) {
             res.send({
@@ -45,81 +46,11 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-//Update Post
-router.put('/:id', async (req, res, next) => {
-    const {id} = req.params;
-    const {title, created_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number} = req.body;
-   try {
-        let post = await Post.findOne({
-            where: {id: id},
-            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
-        }).then(async post => {
-            await post.update({
-                title: title ? title : post.title,
-                created_at: created_at ? created_at : post.created_at,
-                post_typ: post_typ ? post_typ : post.post_typ,
-                description: description ? description : post.description,
-                fee: fee ? fee : post.fee,
-                fee_typ: fee_typ ? fee_typ : post.fee_typ,
-                city: city ? city : post.city,
-                quartier: quartier ? quartier : post.quartier,
-                status: status ? status : post.status,
-                rating: rating ? rating : post.rating,
-                useremail: useremail ? useremail : post.useremail,
-                categorieid: categorieid ? categorieid : post.categorieid,
-                phone_number: phone_number ? phone_number : post.phone_number
-            });
-
-            res.json({
-                result: 'ok',
-                data: post,
-                message: 'Update post successfully'
-            });
-        });
-/*
-        res.json({
-            result: 'failed',
-            data: post,
-            message: "Cannot find post to update"
-        });
-*/
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            data: null,
-            message: `Cannot find post to update. Error: ${error}`
-        });
-    }
-});
-
-//Delete a Post
-router.delete('/:id', async (req, res, next) => {
-    const {id} = req.params;
-    try {
-        let numberOfdeletedRows = await Post.destroy({
-            where: {
-                id
-            }
-        });
-        res.json({
-            result: 'ok',
-            message: 'Delete a Post successfully',
-            count: numberOfdeletedRows
-        });
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            message: `Delete a Post failed. Error ${error}`,
-            count: numberOfdeletedRows
-        });
-    }
-});
-
 //Query all Posts from DB
 router.get('/', async (req, res, next) => {
     try {
         const posts = await Post.findAll({
-            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
         });
         res.json({
             result: 'ok',
@@ -142,7 +73,7 @@ router.get('/:id', async (req, res, next) => {
     const {id} = req.params;
     try {
         let posts = await Post.findAll({
-            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
             where: {
                 id: id
             },
@@ -175,7 +106,7 @@ router.get('/user/:useremail', async (req, res, next) => {
     const {useremail} = req.params;
     try {
         let posts = await Post.findAll({
-            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
             where: {
                 useremail: useremail
             },
@@ -208,7 +139,7 @@ router.get('/categorie/:categorieid', async (req, res, next) => {
     const {categorieid} = req.params;
     try {
         let posts = await Post.findAll({
-            attributes: ["id", "title", "created_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
             where: {
                 categorieid: categorieid
             },
@@ -235,5 +166,71 @@ router.get('/categorie/:categorieid', async (req, res, next) => {
         });
     }
 });
+
+
+//Update Post
+router.put('/:id', async (req, res, next) => {
+    const {id} = req.params;
+    const {title, created_at, updated_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number} = req.body;
+    try {
+        await Post.findOne({
+            where: {id: id},
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
+        }).then(async post => {
+            await post.update({
+                title: title ? title : post.title,
+                created_at: created_at ? created_at : post.created_at,
+                updated_at: updated_at ? updated_at : post.updated_at,
+                post_typ: post_typ ? post_typ : post.post_typ,
+                description: description ? description : post.description,
+                fee: fee ? fee : post.fee,
+                fee_typ: fee_typ ? fee_typ : post.fee_typ,
+                city: city ? city : post.city,
+                quartier: quartier ? quartier : post.quartier,
+                status: status ? status : post.status,
+                rating: rating ? rating : post.rating,
+                useremail: useremail ? useremail : post.useremail,
+                categorieid: categorieid ? categorieid : post.categorieid,
+                phone_number: phone_number ? phone_number : post.phone_number
+            });
+
+            res.json({
+                result: 'ok',
+                data: post,
+                message: 'Update post successfully'
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: null,
+            message: `Cannot find post to update. Error: ${error}`
+        });
+    }
+});
+
+//Delete a Post
+router.delete('/:id', async (req, res, next) => {
+    const {id} = req.params;
+    try {
+        let numberOfdeletedRows = await Post.destroy({
+            where: {
+                id
+            }
+        });
+        res.json({
+            result: 'ok',
+            message: 'Delete a Post successfully',
+            count: numberOfdeletedRows
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            message: `Delete a Post failed. Error ${error}`,
+            count: numberOfdeletedRows
+        });
+    }
+});
+
 
 module.exports = router;

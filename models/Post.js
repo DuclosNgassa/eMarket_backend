@@ -18,6 +18,9 @@ const Post = sequelize.define('posts', {
     created_at: {
         type: Sequelize.DATE
     },
+    updated_at: {
+        type: Sequelize.DATE
+    },
     post_typ: {
         type: Sequelize.ENUM('offer', 'search', 'all')
     },
@@ -37,7 +40,7 @@ const Post = sequelize.define('posts', {
         type: Sequelize.STRING(50)
     },
     status: {
-        type: Sequelize.ENUM('done', 'created')
+        type: Sequelize.ENUM('created', 'active', 'archivated', 'deleted')
     },
     rating: {
         type: Sequelize.INTEGER

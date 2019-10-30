@@ -1,13 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 
 const Favorit = require('../models/Favorit');
-//const Post = require('../models/Post');
 
-//Insert Image
+//Insert Favorite
 router.post('/', async (req, res, next) => {
     const {useremail, created_at, postid} = req.body;
     try {
@@ -39,7 +35,7 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-//Query all Images from DB
+//Query all Favorits from DB
 router.get('/', async (req, res, next) => {
     try {
         const favorits = await Favorit.findAll({
@@ -146,16 +142,16 @@ router.put('/:id', async (req, res, next) => {
             where: {
                 id
             }
-        }).then(async favorite => {
-            await favorite.update({
-                useremail: useremail ? useremail : Favorit.useremail,
-                created_at: created_at ? created_at : Favorit.created_at,
-                postid: postid ? postid : Favorit.postid
+        }).then(async favorit => {
+            await favorit.update({
+                useremail: useremail ? useremail : favorit.useremail,
+                created_at: created_at ? created_at : favorit.created_at,
+                postid: postid ? postid : favorit.postid
             });
 
             res.json({
                 result: 'ok',
-                data: favorite,
+                data: favorit,
                 message: 'Update Favorit successfully'
             });
         });
