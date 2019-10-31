@@ -72,26 +72,18 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
     const {id} = req.params;
     try {
-        let posts = await Post.findAll({
+        await Post.findOne({
             attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
             where: {
                 id: id
             },
-        });
-        if (posts.length > 0) {
+        }).then(post => {
             res.json({
                 result: 'ok',
-                data: posts[0],
+                data: post,
                 message: "Query Post by id successfully"
             });
-        } else {
-            res.json({
-                result: 'failed',
-                data: {},
-                message: "Query Post by id failed. Error"
-            });
-        }
-
+        });
     } catch (error) {
         res.json({
             result: 'failed',
