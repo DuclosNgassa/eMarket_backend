@@ -40,14 +40,15 @@ router.post('/', async (req, res, next) => {
 //Query all Messages from DB
 router.get('/', async (req, res, next) => {
     try {
-        const messages = await Message.findAll({
+        await Message.findAll({
             attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
-        });
-        res.json({
-            result: 'ok',
-            data: messages,
-            length: messages.length,
-            message: "Query list of Messages successfully"
+        }).then(messages => {
+            res.json({
+                result: 'ok',
+                data: messages,
+                length: messages.length,
+                message: "Query list of Messages successfully"
+            });
         });
     } catch (error) {
         res.json({
@@ -197,16 +198,18 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
     const {id} = req.params;
     try {
-        let numberOfdeletedRows = await Message.destroy({
+        await Message.destroy({
             where: {
                 id
             }
+        }).then(numberOfdeletedRows => {
+            res.json({
+                result: 'ok',
+                message: 'Delete a Message successfully',
+                count: numberOfdeletedRows
+            });
         });
-        res.json({
-            result: 'ok',
-            message: 'Delete a Message successfully',
-            count: numberOfdeletedRows
-        });
+
     } catch (error) {
         res.json({
             result: 'failed',
@@ -220,15 +223,16 @@ router.delete('/:id', async (req, res, next) => {
 router.delete('/post/:postid', async (req, res, next) => {
     const {postid} = req.params;
     try {
-        let numberOfdeletedRows = await Message.destroy({
+        await Message.destroy({
             where: {
                 postid
             }
-        });
-        res.json({
-            result: 'ok',
-            message: 'Delete Message by Postid successfully',
-            count: numberOfdeletedRows
+        }).then(numberOfdeletedRows => {
+            res.json({
+                result: 'ok',
+                message: 'Delete Message by Postid successfully',
+                count: numberOfdeletedRows
+            });
         });
     } catch (error) {
         res.json({

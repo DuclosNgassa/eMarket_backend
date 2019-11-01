@@ -40,17 +40,19 @@ router.get('/', async (req, res, next) => {
     try {
         const favorits = await Favorit.findAll({
             attributes: ['id', 'useremail', 'created_at', 'postid'],
-        });
-        res.json({
-            result: 'ok',
-            data: favorits,
-            length: favorits.length,
-            message: "Query list of Favorits successfully"
-        });
+        }).then(favorits => {
+                res.json({
+                    result: 'ok',
+                    data: favorits,
+                    length: favorits.length,
+                    message: "Query list of Favorits successfully"
+                });
+            }
+        );
     } catch (error) {
         res.json({
             result: 'failed',
-            data: [],
+            data: null,
             length: 0,
             message: `Query list of Favorits failed. Error ${error}`
         });
@@ -168,21 +170,21 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
     const {id} = req.params;
     try {
-        let numberOfdeletedRows = await Favorit.destroy({
+        await Favorit.destroy({
             where: {
                 id
             }
-        });
-        res.json({
-            result: 'ok',
-            message: 'Delete a Favorit successfully',
-            count: numberOfdeletedRows
+        }).then(numberOfdeletedRows => {
+            res.json({
+                result: 'ok',
+                message: 'Delete a Favorit successfully',
+                count: numberOfdeletedRows
+            });
         });
     } catch (error) {
         res.json({
             result: 'failed',
             message: `Delete a Favorit failed. Error ${error}`,
-            count: numberOfdeletedRows
         });
     }
 });

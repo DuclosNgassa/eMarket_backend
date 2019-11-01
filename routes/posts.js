@@ -33,14 +33,14 @@ router.post('/', async (req, res, next) => {
         } else {
             res.send({
                 result: 'failed',
-                data: {},
+                data: null,
                 message: `Insert a new Post failed`
             });
         }
     } catch (error) {
         res.send({
             result: 'failed',
-            data: {},
+            data: null,
             message: `Insert a new Post failed. Error: ${error}`
         });
     }
@@ -49,19 +49,20 @@ router.post('/', async (req, res, next) => {
 //Query all Posts from DB
 router.get('/', async (req, res, next) => {
     try {
-        const posts = await Post.findAll({
+        await Post.findAll({
             attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
-        });
-        res.json({
-            result: 'ok',
-            data: posts,
-            length: posts.length,
-            message: "Query list of Posts successfully"
+        }).then(posts => {
+            res.json({
+                result: 'ok',
+                data: posts,
+                length: posts.length,
+                message: "Query list of Posts successfully"
+            });
         });
     } catch (error) {
         res.json({
             result: 'failed',
-            data: [],
+            data: null,
             length: 0,
             message: `Query list of Posts failed. Error ${error}`
         });
@@ -87,7 +88,7 @@ router.get('/:id', async (req, res, next) => {
     } catch (error) {
         res.json({
             result: 'failed',
-            data: {},
+            data: null,
             message: `Query Post by id failed. Error ${error}`
         });
     }
@@ -97,26 +98,18 @@ router.get('/:id', async (req, res, next) => {
 router.get('/user/:useremail', async (req, res, next) => {
     const {useremail} = req.params;
     try {
-        let posts = await Post.findAll({
+        await Post.findAll({
             attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
             where: {
                 useremail: useremail
             },
-        });
-        if (posts.length > 0) {
+        }).then(posts => {
             res.json({
                 result: 'ok',
                 data: posts,
                 message: "Query Post by useremail successfully"
             });
-        } else {
-            res.json({
-                result: 'failed',
-                data: [],
-                message: "Query Post by useremail failed. Error"
-            });
-        }
-
+        });
     } catch (error) {
         res.json({
             result: 'failed',
@@ -130,26 +123,18 @@ router.get('/user/:useremail', async (req, res, next) => {
 router.get('/categorie/:categorieid', async (req, res, next) => {
     const {categorieid} = req.params;
     try {
-        let posts = await Post.findAll({
+        await Post.findAll({
             attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
             where: {
                 categorieid: categorieid
             },
-        });
-        if (posts.length > 0) {
+        }).then(posts => {
             res.json({
                 result: 'ok',
                 data: posts,
                 message: "Query Categorie by categorieid successfully"
             });
-        } else {
-            res.json({
-                result: 'failed',
-                data: [],
-                message: "Query Categorie by categorieid failed. Error"
-            });
-        }
-
+        });
     } catch (error) {
         res.json({
             result: 'failed',
@@ -205,21 +190,22 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
     const {id} = req.params;
     try {
-        let numberOfdeletedRows = await Post.destroy({
+        await Post.destroy({
             where: {
                 id
             }
-        });
-        res.json({
-            result: 'ok',
-            message: 'Delete a Post successfully',
-            count: numberOfdeletedRows
+        }).then(numberOfdeletedRows => {
+            res.json({
+                result: 'ok',
+                message: 'Delete a Post successfully',
+                count: numberOfdeletedRows
+            });
         });
     } catch (error) {
         res.json({
             result: 'failed',
             message: `Delete a Post failed. Error ${error}`,
-            count: numberOfdeletedRows
+            count: 0
         });
     }
 });

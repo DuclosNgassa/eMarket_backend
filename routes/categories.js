@@ -35,6 +35,79 @@ router.post('/', async (req, res, next) => {
     }
 });
 
+//Query all Categories from DB
+router.get('/', async (req, res, next) => {
+    try {
+        const categories = await Categorie.findAll({
+            attributes: ['id', 'title', 'parentid', 'icon'],
+        }).then(categories => {
+            res.json({
+                result: 'ok',
+                data: categories,
+                length: categories.length,
+                message: "Query list of Categories successfully"
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: [],
+            length: 0,
+            message: `Query list of Categories failed. Error ${error}`
+        });
+    }
+});
+
+//Query Categorie by given id
+router.get('/:id', async (req, res, next) => {
+    const {id} = req.params;
+    try {
+        await Categorie.findOne({
+            attributes: ['id', 'title', 'parentid', 'icon'],
+            where: {
+                id: id
+            },
+        }).then(categorie => {
+            res.json({
+                result: 'ok',
+                data: categorie,
+                message: "Query Categorie by id successfully"
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: null,
+            message: `Query Categorie by id failed. Error ${error}`
+        });
+    }
+});
+
+//Query Categories by given parentId
+router.get('/parent/:parentid', async (req, res, next) => {
+    const {parentid} = req.params;
+    try {
+        await Categorie.findAll({
+            attributes: ['id', 'title', 'parentid', 'icon'],
+            where: {
+                parentid: parentid
+            },
+        }).then(categories => {
+            res.json({
+                result: 'ok',
+                data: categories,
+                message: "Query Categorie by parentid successfully"
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: {},
+            message: `Query Categorie by parentid failed. Error ${error}`
+        });
+    }
+});
+
 //Update Categorie
 router.put('/:id', async (req, res, next) => {
     const {id} = req.params;
@@ -47,7 +120,7 @@ router.put('/:id', async (req, res, next) => {
             }
         });
         if (categories.length > 0) {
-            categories.forEach(
+            await categories.forEach(
                 async (categorie) => {
                     await categorie.update({
                         title: title ? title : categorie.title,
@@ -69,7 +142,6 @@ router.put('/:id', async (req, res, next) => {
     } catch (error) {
         res.json({
             result: 'failed',
-            data: categories,
             message: `Cannot find categorie to update. Error: ${error}`
         });
     }
@@ -84,113 +156,25 @@ router.delete('/:id', async (req, res, next) => {
                 where: {
                     parentid: id
                 }
-            });
-        let numberOfdeletedRows = await Categorie.destroy({
-            where: {
-                id
+            }).then(() => {
+                Categorie.destroy({
+                    where: {
+                        id
+                    }
+                }).then(() => {
+                    res.json({
+                        result: 'ok',
+                        message: 'Delete a Categorie successfully',
+                    });
+                });
             }
-        });
-        res.json({
-            result: 'ok',
-            message: 'Delete a Categorie successfully',
-            count: numberOfdeletedRows
-        });
+        );
     } catch (error) {
         res.json({
             result: 'failed',
             message: `Delete a Categorie failed. Error ${error}`,
-            count: numberOfdeletedRows
         });
     }
 });
-
-//Query all Categories from DB
-router.get('/', async (req, res, next) => {
-    try {
-        const categories = await Categorie.findAll({
-            attributes: ['id', 'title', 'parentid', 'icon'],
-        });
-        res.json({
-            result: 'ok',
-            data: categories,
-            length: categories.length,
-            message: "Query list of Categories successfully"
-        });
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            data: [],
-            length: 0,
-            message: `Query list of Categories failed. Error ${error}`
-        });
-    }
-});
-
-//Query Categorie by given id
-router.get('/:id', async (req, res, next) => {
-    const {id} = req.params;
-    try {
-        let categories = await Categorie.findAll({
-            attributes: ['id', 'title', 'parentid', 'icon'],
-            where: {
-                id: id
-            },
-        });
-        if (categories.length > 0) {
-            res.json({
-                result: 'ok',
-                data: categories[0],
-                message: "Query Categorie by id successfully"
-            });
-        } else {
-            res.json({
-                result: 'failed',
-                data: {},
-                message: "Query Categorie by id failed. Error"
-            });
-        }
-
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            data: {},
-            message: `Query Categorie by id failed. Error ${error}`
-        });
-    }
-});
-
-//Query Categories by given parentId
-router.get('/parent/:parentid', async (req, res, next) => {
-    const {parentid} = req.params;
-    try {
-        let categories = await Categorie.findAll({
-            attributes: ['id', 'title', 'parentid', 'icon'],
-            where: {
-                parentid: parentid
-            },
-        });
-        if (categories.length > 0) {
-            res.json({
-                result: 'ok',
-                data: categories,
-                message: "Query Categorie by parentid successfully"
-            });
-        } else {
-            res.json({
-                result: 'failed',
-                data: [],
-                message: "Query Categorie by parentid failed. Error"
-            });
-        }
-
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            data: {},
-            message: `Query Categorie by parentid failed. Error ${error}`
-        });
-    }
-});
-
 
 module.exports = router;
