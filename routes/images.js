@@ -212,6 +212,47 @@ router.delete('/:id', async (req, res, next) => {
     }
 });
 
+//Delete a Image by Url
+router.delete('/url/:url', async (req, res, next) => {
+    const {url} = req.params;
+    const urlToRemove = "http://192.168.2.120:3000/images/" + url;
+    console.log('Url to delete: ');
+    try {
+        await Image.findAll({
+            attributes: ['id', 'image_url', 'created_at', 'postid'],
+            where: {
+                image_url: urlToRemove
+            },
+        }).then(images => {
+            images.forEach(image => {
+                let filePath = image.image_url.split('/images')[1];
+                filePath = './public/images' + filePath;
+                console.log('Imagepath to delete: ' + filePath);
+                fs.unlinkSync(filePath);
+            });
+        }).then(() => {
+            Image.destroy({
+                where: {
+                    image_url: urlToRemove
+                }
+            }).then(numberOfdeletedRows => {
+                res.json({
+                    result: 'ok',
+                    message: 'Delete a Image successfully',
+                    count: numberOfdeletedRows
+                });
+            })
+        });
+    } catch (error) {
+        console.log("Errooooooor");
+        res.json({
+            result: 'failed',
+            message: `Delete a Image failed. Error ${error}`,
+            count: 0
+        });
+    }
+});
+
 //delete a Image by given postid
 router.delete('/post/:postid', async (req, res, next) => {
     const {postid} = req.params;
