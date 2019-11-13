@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const Message = require('../models/Message');
+const Op = require('Sequelize').Op;
 
 //Insert Message
 router.post('/', async (req, res, next) => {
@@ -114,26 +115,19 @@ router.get('/post/:postid', async (req, res, next) => {
 router.get('/email/:email', async (req, res, next) => {
     console.log("Get messages by Email");
     const {email} = req.params;
+
     try {
-        var messageSent = await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
-
-            where: {
-                sender: email
-            }
-        });
-
-        await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
-            where: {
-                receiver: email
-            }
-        }).then(messages => {
-
-           var allMessage =  messages.concat(messageSent);
+        var condition = {
+            where:
+                {
+                    [Op.or]:
+                        [{sender: email}, {receiver: email}]
+                }
+        };
+        await Message.findAll(condition).then(messages => {
             res.json({
                 result: 'ok',
-                data: allMessage,
+                data: messages,
                 message: "Query Message by email successfully"
             });
         });
