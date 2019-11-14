@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const Message = require('../models/Message');
-const Op = require('Sequelize').Op;
+const Op = require('../databases');
 
 //Insert Message
 router.post('/', async (req, res, next) => {
