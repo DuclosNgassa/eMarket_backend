@@ -1,48 +1,71 @@
+-- DROP TYPE fee_typ;
+CREATE TYPE fee_typ AS ENUM (
+	'negotiable',
+	'fixed',
+	'gift');
+
+	-- DROP TYPE post_status;
+CREATE TYPE post_status AS ENUM (
+	'created',
+	'active',
+	'archivated',
+	'deleted');
+
+-- DROP TYPE post_typ;
+CREATE TYPE post_typ AS ENUM (
+	'offer',
+	'search',
+	'all');
+
+-- DROP TYPE user_status;
+CREATE TYPE user_status AS ENUM (
+	'active',
+	'blocked');
 
 -- Drop table
--- DROP TABLE emarket.users;
+-- DROP TABLE users;
 
-CREATE TABLE emarket.users (
+CREATE TABLE users (
 	id serial NOT NULL,
 	"name" varchar(50) NULL,
 	email varchar(100) NULL,
 	phone_number varchar NULL,
 	created_at date NULL,
 	rating int4 NULL DEFAULT 5,
-	user_status emarket.user_status NULL,
+	user_status user_status NULL,
 	CONSTRAINT users_email_key UNIQUE (email),
 	CONSTRAINT users_pkey PRIMARY KEY (id)
 );
 
 
 -- Drop table
--- DROP TABLE emarket.categories;
+-- DROP TABLE categories;
 
-CREATE TABLE emarket.categories (
+CREATE TABLE categories (
 	id serial NOT NULL,
 	title varchar(50) NULL,
 	parentid int4 NULL,
 	icon varchar(50) NULL,
 	CONSTRAINT categories_pkey PRIMARY KEY (id),
-	CONSTRAINT categories_parent_categorie_id_fkey FOREIGN KEY (parentid) REFERENCES emarket.categories(id)
+	CONSTRAINT categories_parent_categorie_id_fkey FOREIGN KEY (parentid) REFERENCES categories(id)
 );
 
 
 -- Drop table
--- DROP TABLE emarket.posts;
+-- DROP TABLE posts;
 
-CREATE TABLE emarket.posts (
+CREATE TABLE posts (
 	id serial NOT NULL,
 	title varchar(50) NOT NULL,
 	created_at timestamp NULL DEFAULT now(),
 	updated_at timestamp NULL DEFAULT now(),
-	post_typ emarket.post_typ NOT NULL,
+	post_typ post_typ NOT NULL,
 	description varchar(1000) NULL,
 	fee numeric NULL,
-	fee_typ emarket.fee_typ NULL,
+	fee_typ fee_typ NULL,
 	city varchar(50) NULL,
 	quartier varchar(50) NULL,
-	status emarket.post_status NOT NULL,
+	status post_status NOT NULL,
 	rating int4 NULL DEFAULT 5,
 	useremail varchar(100) NOT NULL,
 	categorieid int4 NOT NULL,
@@ -50,14 +73,14 @@ CREATE TABLE emarket.posts (
 	CONSTRAINT posts_pkey PRIMARY KEY (id)
 );
 
-ALTER TABLE emarket.posts ADD CONSTRAINT posts_categorie_id_fkey FOREIGN KEY (categorieid) REFERENCES emarket.categories(id);
-ALTER TABLE emarket.posts ADD CONSTRAINT posts_user_email_fkey FOREIGN KEY (useremail) REFERENCES emarket.users(email);
+ALTER TABLE posts ADD CONSTRAINT posts_categorie_id_fkey FOREIGN KEY (categorieid) REFERENCES categories(id);
+ALTER TABLE posts ADD CONSTRAINT posts_user_email_fkey FOREIGN KEY (useremail) REFERENCES users(email);
 
 
 -- Drop table
--- DROP TABLE emarket.images;
+-- DROP TABLE images;
 
-CREATE TABLE emarket.images (
+CREATE TABLE images (
 	id serial NOT NULL,
 	image_url varchar NOT NULL,
 	created_at timestamp NULL DEFAULT now(),
@@ -65,13 +88,13 @@ CREATE TABLE emarket.images (
 	CONSTRAINT images_pkey PRIMARY KEY (id)
 );
 
-ALTER TABLE emarket.images ADD CONSTRAINT images_post_id_fkey FOREIGN KEY (postid) REFERENCES emarket.posts(id);
+ALTER TABLE images ADD CONSTRAINT images_post_id_fkey FOREIGN KEY (postid) REFERENCES posts(id);
 
 
 -- Drop table
--- DROP TABLE emarket.favorits;
+-- DROP TABLE favorits;
 
-CREATE TABLE emarket.favorits (
+CREATE TABLE favorits (
 	id serial NOT NULL,
 	useremail varchar(100) NULL,
 	created_at timestamp NULL DEFAULT now(),
@@ -79,14 +102,14 @@ CREATE TABLE emarket.favorits (
 	CONSTRAINT favorits_pkey PRIMARY KEY (id)
 );
 
-ALTER TABLE emarket.favorits ADD CONSTRAINT favorits_post_id_fkey FOREIGN KEY (postid) REFERENCES emarket.posts(id);
-ALTER TABLE emarket.favorits ADD CONSTRAINT favorits_user_email_fkey FOREIGN KEY (useremail) REFERENCES emarket.users(email);
+ALTER TABLE favorits ADD CONSTRAINT favorits_post_id_fkey FOREIGN KEY (postid) REFERENCES posts(id);
+ALTER TABLE favorits ADD CONSTRAINT favorits_user_email_fkey FOREIGN KEY (useremail) REFERENCES users(email);
 
 
 -- Drop table
--- DROP TABLE emarket.messages;
+-- DROP TABLE messages;
 
-CREATE TABLE emarket.messages (
+CREATE TABLE messages (
 	id serial NOT NULL,
 	sender varchar(100) NULL,
 	receiver varchar(100) NULL,
@@ -96,6 +119,6 @@ CREATE TABLE emarket.messages (
 	CONSTRAINT messages_pkey PRIMARY KEY (id)
 );
 
-ALTER TABLE emarket.messages ADD CONSTRAINT messages_post_id_fkey FOREIGN KEY (postid) REFERENCES emarket.posts(id);
-ALTER TABLE emarket.messages ADD CONSTRAINT messages_receiver_user_email_fkey FOREIGN KEY (receiver) REFERENCES emarket.users(email);
-ALTER TABLE emarket.messages ADD CONSTRAINT messages_sender_user_email_fkey FOREIGN KEY (sender) REFERENCES emarket.users(email);
+ALTER TABLE messages ADD CONSTRAINT messages_post_id_fkey FOREIGN KEY (postid) REFERENCES posts(id);
+ALTER TABLE messages ADD CONSTRAINT messages_receiver_user_email_fkey FOREIGN KEY (receiver) REFERENCES users(email);
+ALTER TABLE messages ADD CONSTRAINT messages_sender_user_email_fkey FOREIGN KEY (sender) REFERENCES users(email);
