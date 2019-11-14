@@ -21,4 +21,4 @@ const Op = Sequelize.Op;
 module.exports = {
     sequelize,
     Op
-}
+};

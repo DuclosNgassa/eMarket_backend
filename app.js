@@ -11,6 +11,12 @@ const categoriesRouter = require('./routes/categories');
 const messagesRouter = require('./routes/messages');
 const favoritsRouter = require('./routes/favorits');
 
+const { Pool } = require('pg');
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
+});
+
 const app = express();
 
 app.set('view engine', 'ejs');
