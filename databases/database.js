@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize');
 
 var sequelize = null;
-if (process.env.HEROKU_POSTGRESQL_BRONZE_URL) {
+
+if (process.env.DATABASE_URL) {
     // the application is executed on Heroku ... use the postgres database
     //sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_BRONZE_URL, {
     sequelize = new Sequelize(process.env.DATABASE_URL, {
