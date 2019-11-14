@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const Message = require('../models/Message');
-const Op = require('../databases');
+//const Op = require('../databases');
 
 //Insert Message
 router.post('/', async (req, res, next) => {
@@ -112,6 +112,7 @@ router.get('/post/:postid', async (req, res, next) => {
 });
 
 //Query Message by given sender
+/*
 router.get('/email/:email', async (req, res, next) => {
     console.log("Get messages by Email");
     const {email} = req.params;
@@ -139,6 +140,7 @@ router.get('/email/:email', async (req, res, next) => {
         });
     }
 });
+*/
 
 //Query Message by given sender
 router.get('/sender/:sender', async (req, res, next) => {
