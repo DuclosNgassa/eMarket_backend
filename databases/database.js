@@ -1,21 +1,34 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize(
-    'postgres', // db name
-    'armelduclosndanjingassa', // username
-    '123456',
-    {
+var sequelize = null;
+if (process.env.HEROKU_POSTGRESQL_BRONZE_URL) {
+    // the application is executed on Heroku ... use the postgres database
+    //sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_BRONZE_URL, {
+    sequelize = new Sequelize(process.env.DATABASE_URL, {
         dialect: 'postgres',
-        schema: 'emarket',
-        host: 'localhost',
-        pool:{
-            max: 5,
-            min: 0,
-            require: 30000,
-            idle: 10000
+        protocol: 'postgres',
+        port: match[4],
+        host: match[3],
+        logging: true //false
+    });
+} else {
+    sequelize = new Sequelize(
+        'postgres', // db name
+        'armelduclosndanjingassa', // username
+        '123456',
+        {
+            dialect: 'postgres',
+            schema: 'emarket',
+            host: 'localhost',
+            pool: {
+                max: 5,
+                min: 0,
+                require: 30000,
+                idle: 10000
+            }
         }
-    }
-);
+    );
+}
 
 const Op = Sequelize.Op;
 module.exports = {

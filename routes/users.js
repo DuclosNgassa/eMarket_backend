@@ -5,15 +5,8 @@ const User = require('../models/User');
 
 //Insert User
 router.post('/', async (req, res, next) => {
-    //const {name, email, phone_number, created_at, rating, user_status} = req.body;
+    const {name, email, phone_number, created_at, rating, user_status} = req.body;
     console.log('Create user');
-    res.send({
-        result: 'failed',
-        data: {},
-        message: 'Insert a new User failed. Error:'
-    });
-
-    /*
         try {
             let newUser = await User.create({
                 name,
@@ -44,7 +37,6 @@ router.post('/', async (req, res, next) => {
                 message: `Insert a new User failed. Error: ${error}`
             });
         }
-    */
 });
 
 //Query all Users from DB
