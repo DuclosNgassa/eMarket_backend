@@ -5,38 +5,46 @@ const User = require('../models/User');
 
 //Insert User
 router.post('/', async (req, res, next) => {
-    const {name, email, phone_number, created_at, rating, user_status} = req.body;
+    //const {name, email, phone_number, created_at, rating, user_status} = req.body;
     console.log('Create user');
-    try {
-        let newUser = await User.create({
-            name,
-            email,
-            phone_number,
-            created_at,
-            rating,
-            user_status
-        }, {
-            fields: ["name", "email", "phone_number", "created_at", "rating", "user_status"]
-        });
-        if (newUser) {
-            res.send({
-                result: 'ok',
-                data: newUser
+    res.send({
+        result: 'failed',
+        data: {},
+        message: 'Insert a new User failed. Error:'
+    });
+
+    /*
+        try {
+            let newUser = await User.create({
+                name,
+                email,
+                phone_number,
+                created_at,
+                rating,
+                user_status
+            }, {
+                fields: ["name", "email", "phone_number", "created_at", "rating", "user_status"]
             });
-        } else {
+            if (newUser) {
+                res.send({
+                    result: 'ok',
+                    data: newUser
+                });
+            } else {
+                res.send({
+                    result: 'failed',
+                    data: {},
+                    message: `Insert a new User failed`
+                });
+            }
+        } catch (error) {
             res.send({
                 result: 'failed',
                 data: {},
-                message: `Insert a new User failed`
+                message: `Insert a new User failed. Error: ${error}`
             });
         }
-    } catch (error) {
-        res.send({
-            result: 'failed',
-            data: {},
-            message: `Insert a new User failed. Error: ${error}`
-        });
-    }
+    */
 });
 
 //Query all Users from DB
