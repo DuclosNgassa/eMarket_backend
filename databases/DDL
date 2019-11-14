@@ -16,24 +16,6 @@ CREATE TABLE emarket.users (
 
 
 -- Drop table
--- DROP TABLE emarket.messages;
-
-CREATE TABLE emarket.messages (
-	id serial NOT NULL,
-	sender varchar(100) NULL,
-	receiver varchar(100) NULL,
-	created_at timestamp NULL DEFAULT now(),
-	postid int4 NOT NULL,
-	body varchar(1000) NOT NULL,
-	CONSTRAINT messages_pkey PRIMARY KEY (id)
-);
-
-ALTER TABLE emarket.messages ADD CONSTRAINT messages_post_id_fkey FOREIGN KEY (postid) REFERENCES emarket.posts(id);
-ALTER TABLE emarket.messages ADD CONSTRAINT messages_receiver_user_email_fkey FOREIGN KEY (receiver) REFERENCES emarket.users(email);
-ALTER TABLE emarket.messages ADD CONSTRAINT messages_sender_user_email_fkey FOREIGN KEY (sender) REFERENCES emarket.users(email);
-
-
--- Drop table
 -- DROP TABLE emarket.categories;
 
 CREATE TABLE emarket.categories (
@@ -99,3 +81,21 @@ CREATE TABLE emarket.favorits (
 
 ALTER TABLE emarket.favorits ADD CONSTRAINT favorits_post_id_fkey FOREIGN KEY (postid) REFERENCES emarket.posts(id);
 ALTER TABLE emarket.favorits ADD CONSTRAINT favorits_user_email_fkey FOREIGN KEY (useremail) REFERENCES emarket.users(email);
+
+
+-- Drop table
+-- DROP TABLE emarket.messages;
+
+CREATE TABLE emarket.messages (
+	id serial NOT NULL,
+	sender varchar(100) NULL,
+	receiver varchar(100) NULL,
+	created_at timestamp NULL DEFAULT now(),
+	postid int4 NOT NULL,
+	body varchar(1000) NOT NULL,
+	CONSTRAINT messages_pkey PRIMARY KEY (id)
+);
+
+ALTER TABLE emarket.messages ADD CONSTRAINT messages_post_id_fkey FOREIGN KEY (postid) REFERENCES emarket.posts(id);
+ALTER TABLE emarket.messages ADD CONSTRAINT messages_receiver_user_email_fkey FOREIGN KEY (receiver) REFERENCES emarket.users(email);
+ALTER TABLE emarket.messages ADD CONSTRAINT messages_sender_user_email_fkey FOREIGN KEY (sender) REFERENCES emarket.users(email);
