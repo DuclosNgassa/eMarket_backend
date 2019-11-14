@@ -149,6 +149,7 @@ router.get('/categorie/:categorieid', async (req, res, next) => {
     }
 });
 
+/*
 router.get('/db', async (req, res) => {
     try {
         const client = await pool.connect();
@@ -161,6 +162,7 @@ router.get('/db', async (req, res) => {
         res.send("Error " + err);
     }
 });
+*/
 
 //Update Post
 router.put('/:id', async (req, res, next) => {
