@@ -1,6 +1,6 @@
 INSERT INTO categories (title,parentid,icon) VALUES
-('Voiture, Moto & Camion',NULL,'0xe531')
-/*,('Vélos & Accessoires',1,NULL)
+--('Voiture, Moto & Camion',NULL,'0xe531')
+('Vélos & Accessoires',1,NULL)
 ,('Motos & Accessoires',1,NULL)
 ,('Camions & Accessoires',1,NULL)
 ,('Mecanicien',1,NULL)
@@ -8,8 +8,8 @@ INSERT INTO categories (title,parentid,icon) VALUES
 ,('Autres',NULL,'0xe5d3')
 ,('Décoration',9,NULL)
 ,('Voitures',1,NULL)
-,('Pieces de voiture et pneu',1,NULL)
-*/;
+,('Pieces de voiture et pneu',1,NULL);
+
 INSERT INTO categories (title,parentid,icon) VALUES
 ('Restaurant & Service traiteur',NULL,'0xe56c')
 ,('Immobilier',NULL,'0xe88a')

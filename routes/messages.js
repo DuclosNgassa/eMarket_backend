@@ -111,24 +111,30 @@ router.get('/post/:postid', async (req, res, next) => {
     }
 });
 
-//Query Message by given sender
-/*
+//Query Message by email
 router.get('/email/:email', async (req, res, next) => {
     console.log("Get messages by Email");
     const {email} = req.params;
-
     try {
-        var condition = {
-            where:
-                {
-                    [Op.or]:
-                        [{sender: email}, {receiver: email}]
-                }
-        };
-        await Message.findAll(condition).then(messages => {
+        let messageSent = await Message.findAll({
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
+
+            where: {
+                sender: email
+            }
+        });
+
+        await Message.findAll({
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
+            where: {
+                receiver: email
+            }
+        }).then(messages => {
+
+           let allMessage =  messages.concat(messageSent);
             res.json({
                 result: 'ok',
-                data: messages,
+                data: allMessage,
                 message: "Query Message by email successfully"
             });
         });
@@ -140,7 +146,6 @@ router.get('/email/:email', async (req, res, next) => {
         });
     }
 });
-*/
 
 //Query Message by given sender
 router.get('/sender/:sender', async (req, res, next) => {

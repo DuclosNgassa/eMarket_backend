@@ -1,30 +1,29 @@
--- DROP TYPE fee_typ;
+DROP TYPE fee_typ;
 CREATE TYPE fee_typ AS ENUM (
 	'negotiable',
 	'fixed',
 	'gift');
 
-	-- DROP TYPE post_status;
+DROP TYPE post_status;
 CREATE TYPE post_status AS ENUM (
 	'created',
 	'active',
 	'archivated',
 	'deleted');
 
--- DROP TYPE post_typ;
+DROP TYPE post_typ;
 CREATE TYPE post_typ AS ENUM (
 	'offer',
 	'search',
 	'all');
 
--- DROP TYPE user_status;
+DROP TYPE user_status;
 CREATE TYPE user_status AS ENUM (
 	'active',
 	'blocked');
 
 -- Drop table
--- DROP TABLE users;
-
+DROP TABLE users;
 CREATE TABLE users (
 	id serial NOT NULL,
 	"name" varchar(50) NULL,
@@ -39,8 +38,7 @@ CREATE TABLE users (
 
 
 -- Drop table
--- DROP TABLE categories;
-
+DROP TABLE categories;
 CREATE TABLE categories (
 	id serial NOT NULL,
 	title varchar(50) NULL,
@@ -52,8 +50,7 @@ CREATE TABLE categories (
 
 
 -- Drop table
--- DROP TABLE posts;
-
+DROP TABLE posts;
 CREATE TABLE posts (
 	id serial NOT NULL,
 	title varchar(50) NOT NULL,
@@ -70,16 +67,15 @@ CREATE TABLE posts (
 	useremail varchar(100) NOT NULL,
 	categorieid int4 NOT NULL,
 	phone_number varchar(50) NULL,
+	count_view int4 NULL,
 	CONSTRAINT posts_pkey PRIMARY KEY (id)
 );
-
 ALTER TABLE posts ADD CONSTRAINT posts_categorie_id_fkey FOREIGN KEY (categorieid) REFERENCES categories(id);
 ALTER TABLE posts ADD CONSTRAINT posts_user_email_fkey FOREIGN KEY (useremail) REFERENCES users(email);
 
 
 -- Drop table
--- DROP TABLE images;
-
+DROP TABLE images;
 CREATE TABLE images (
 	id serial NOT NULL,
 	image_url varchar NOT NULL,
@@ -87,13 +83,11 @@ CREATE TABLE images (
 	postid int4 NULL,
 	CONSTRAINT images_pkey PRIMARY KEY (id)
 );
-
 ALTER TABLE images ADD CONSTRAINT images_post_id_fkey FOREIGN KEY (postid) REFERENCES posts(id);
 
 
 -- Drop table
--- DROP TABLE favorits;
-
+DROP TABLE favorits;
 CREATE TABLE favorits (
 	id serial NOT NULL,
 	useremail varchar(100) NULL,
@@ -101,14 +95,12 @@ CREATE TABLE favorits (
 	postid int4 NOT NULL,
 	CONSTRAINT favorits_pkey PRIMARY KEY (id)
 );
-
 ALTER TABLE favorits ADD CONSTRAINT favorits_post_id_fkey FOREIGN KEY (postid) REFERENCES posts(id);
 ALTER TABLE favorits ADD CONSTRAINT favorits_user_email_fkey FOREIGN KEY (useremail) REFERENCES users(email);
 
 
 -- Drop table
--- DROP TABLE messages;
-
+DROP TABLE messages;
 CREATE TABLE messages (
 	id serial NOT NULL,
 	sender varchar(100) NULL,
@@ -118,7 +110,6 @@ CREATE TABLE messages (
 	body varchar(1000) NOT NULL,
 	CONSTRAINT messages_pkey PRIMARY KEY (id)
 );
-
 ALTER TABLE messages ADD CONSTRAINT messages_post_id_fkey FOREIGN KEY (postid) REFERENCES posts(id);
 ALTER TABLE messages ADD CONSTRAINT messages_receiver_user_email_fkey FOREIGN KEY (receiver) REFERENCES users(email);
 ALTER TABLE messages ADD CONSTRAINT messages_sender_user_email_fkey FOREIGN KEY (sender) REFERENCES users(email);

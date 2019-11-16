@@ -1,10 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const { Pool } = require('pg');
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: true
-});
 
 const Post = require('../models/Post');
 
@@ -26,9 +21,10 @@ router.post('/', async (req, res, next) => {
             rating: 5,
             useremail,
             categorieid,
-            phone_number
+            phone_number,
+            count_view: 0
         }, {
-            fields: ["title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"]
+            fields: ["title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"]
         });
         if (newPost) {
             res.send({
@@ -55,7 +51,7 @@ router.post('/', async (req, res, next) => {
 router.get('/', async (req, res, next) => {
     try {
         await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
         }).then(posts => {
             res.json({
                 result: 'ok',
@@ -79,7 +75,7 @@ router.get('/:id', async (req, res, next) => {
     const {id} = req.params;
     try {
         await Post.findOne({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
             where: {
                 id: id
             },
@@ -104,7 +100,7 @@ router.get('/user/:useremail', async (req, res, next) => {
     const {useremail} = req.params;
     try {
         await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
             where: {
                 useremail: useremail
             },
@@ -129,7 +125,7 @@ router.get('/categorie/:categorieid', async (req, res, next) => {
     const {categorieid} = req.params;
     try {
         await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
             where: {
                 categorieid: categorieid
             },
@@ -167,11 +163,11 @@ router.get('/db', async (req, res) => {
 //Update Post
 router.put('/:id', async (req, res, next) => {
     const {id} = req.params;
-    const {title, created_at, updated_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number} = req.body;
+    const {title, created_at, updated_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number, count_view} = req.body;
     try {
         await Post.findOne({
             where: {id: id},
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
         }).then(async post => {
             await post.update({
                 title: title ? title : post.title,
@@ -187,7 +183,8 @@ router.put('/:id', async (req, res, next) => {
                 rating: rating ? rating : post.rating,
                 useremail: useremail ? useremail : post.useremail,
                 categorieid: categorieid ? categorieid : post.categorieid,
-                phone_number: phone_number ? phone_number : post.phone_number
+                phone_number: phone_number ? phone_number : post.phone_number,
+                count_view: count_view ? count_view : post.count_view
             });
 
             res.json({

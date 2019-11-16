@@ -54,6 +54,9 @@ const Post = sequelize.define('posts', {
     phone_number: {
         type: Sequelize.STRING,
     },
+    count_view: {
+        type: Sequelize.INTEGER,
+    },
 },{
     timestamps: false,
 });
