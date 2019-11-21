@@ -1,230 +1,28 @@
 const express = require("express");
 const router = express.Router();
 
-const Post = require('../models/Post');
+const postController = require('../controllers/postController');
 
 //Insert Post
-router.post('/', async (req, res, next) => {
-    const {title, created_at, updated_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number} = req.body;
-    try {
-        let newPost = await Post.create({
-            title,
-            created_at,
-            updated_at,
-            post_typ,
-            description,
-            fee,
-            fee_typ,
-            city,
-            quartier,
-            status: "created",
-            rating: 5,
-            useremail,
-            categorieid,
-            phone_number,
-            count_view: 0
-        }, {
-            fields: ["title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"]
-        });
-        if (newPost) {
-            res.send({
-                result: 'ok',
-                data: newPost
-            });
-        } else {
-            res.send({
-                result: 'failed',
-                data: null,
-                message: `Insert a new Post failed`
-            });
-        }
-    } catch (error) {
-        res.send({
-            result: 'failed',
-            data: null,
-            message: `Insert a new Post failed. Error: ${error}`
-        });
-    }
-});
+router.post('/', postController.create);
 
 //Query all Posts from DB
-router.get('/', async (req, res, next) => {
-    try {
-        await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
-        }).then(posts => {
-            res.json({
-                result: 'ok',
-                data: posts,
-                length: posts.length,
-                message: "Query list of Posts successfully"
-            });
-        });
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            data: null,
-            length: 0,
-            message: `Query list of Posts failed. Error ${error}`
-        });
-    }
-});
+router.get('/', postController.readAll);
 
 //Query Post by given id
-router.get('/:id', async (req, res, next) => {
-    const {id} = req.params;
-    try {
-        await Post.findOne({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
-            where: {
-                id: id
-            },
-        }).then(post => {
-            res.json({
-                result: 'ok',
-                data: post,
-                message: "Query Post by id successfully"
-            });
-        });
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            data: null,
-            message: `Query Post by id failed. Error ${error}`
-        });
-    }
-});
+router.get('/:id', postController.findById);
 
 //Query Posts by given useremail
-router.get('/user/:useremail', async (req, res, next) => {
-    const {useremail} = req.params;
-    try {
-        await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
-            where: {
-                useremail: useremail
-            },
-        }).then(posts => {
-            res.json({
-                result: 'ok',
-                data: posts,
-                message: "Query Post by useremail successfully"
-            });
-        });
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            data: {},
-            message: `Query Post by useremail failed. Error ${error}`
-        });
-    }
-});
+router.get('/user/:useremail',postController.findByUsermail);
 
 //Query Posts by given categorieid
-router.get('/categorie/:categorieid', async (req, res, next) => {
-    const {categorieid} = req.params;
-    try {
-        await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
-            where: {
-                categorieid: categorieid
-            },
-        }).then(posts => {
-            res.json({
-                result: 'ok',
-                data: posts,
-                message: "Query Categorie by categorieid successfully"
-            });
-        });
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            data: {},
-            message: `Query Categorie by categorieid failed. Error ${error}`
-        });
-    }
-});
-
-/*
-router.get('/db', async (req, res) => {
-    try {
-        const client = await pool.connect();
-        const result = await client.query('SELECT * FROM test_table');
-        const results = { 'results': (result) ? result.rows : null};
-        res.render('pages/db', results );
-        client.release();
-    } catch (err) {
-        console.error(err);
-        res.send("Error " + err);
-    }
-});
-*/
+router.get('/categorie/:categorieid', postController.findByCategorieId);
 
 //Update Post
-router.put('/:id', async (req, res, next) => {
-    const {id} = req.params;
-    const {title, created_at, updated_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number, count_view} = req.body;
-    try {
-        await Post.findOne({
-            where: {id: id},
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
-        }).then(async post => {
-            await post.update({
-                title: title ? title : post.title,
-                created_at: created_at ? created_at : post.created_at,
-                updated_at: updated_at ? updated_at : post.updated_at,
-                post_typ: post_typ ? post_typ : post.post_typ,
-                description: description ? description : post.description,
-                fee: fee ? fee : post.fee,
-                fee_typ: fee_typ ? fee_typ : post.fee_typ,
-                city: city ? city : post.city,
-                quartier: quartier ? quartier : post.quartier,
-                status: status ? status : post.status,
-                rating: rating ? rating : post.rating,
-                useremail: useremail ? useremail : post.useremail,
-                categorieid: categorieid ? categorieid : post.categorieid,
-                phone_number: phone_number ? phone_number : post.phone_number,
-                count_view: count_view ? count_view : post.count_view
-            });
-
-            res.json({
-                result: 'ok',
-                data: post,
-                message: 'Update post successfully'
-            });
-        });
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            data: null,
-            message: `Cannot find post to update. Error: ${error}`
-        });
-    }
-});
+router.put('/:id', postController.update);
 
 //Delete a Post
-router.delete('/:id', async (req, res, next) => {
-    const {id} = req.params;
-    try {
-        await Post.destroy({
-            where: {
-                id
-            }
-        }).then(numberOfdeletedRows => {
-            res.json({
-                result: 'ok',
-                message: 'Delete a Post successfully',
-                count: numberOfdeletedRows
-            });
-        });
-    } catch (error) {
-        res.json({
-            result: 'failed',
-            message: `Delete a Post failed. Error ${error}`,
-            count: 0
-        });
-    }
-});
+router.delete('/:id', postController.delete);
 
 
 module.exports = router;
