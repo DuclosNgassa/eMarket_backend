@@ -9,6 +9,18 @@ router.post('/', postController.create);
 //Query all Posts from DB
 router.get('/', postController.readAll);
 
+//Query all active Posts from DB
+router.get('/active', postController.readAllActive);
+
+//Query all created Posts from DB
+router.get('/created', postController.readAllCreated);
+
+//Query all deleted Posts from DB
+router.get('/deleted', postController.readAllDeleted);
+
+//Query all archivated Posts from DB
+router.get('/archivated', postController.readAllArchivated);
+
 //Query Post by given id
 router.get('/:id', postController.findById);
 

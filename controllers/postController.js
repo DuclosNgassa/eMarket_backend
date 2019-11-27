@@ -1,5 +1,5 @@
 const Post = require('../models/Post');
-
+const Op = Sequelize.Op;
 //Insert Post
 exports.create = async function (req, res, next) {
     const {title, created_at, updated_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number} = req.body;
@@ -67,6 +67,119 @@ exports.readAll = async function (req, res, next) {
     }
 };
 
+//Query all active Posts from DB
+exports.readAllActive = async function (req, res, next) {
+    try {
+        await Post.findAll({
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+
+            where: {
+                status: 'active'
+            },
+
+        }).then(posts => {
+            res.json({
+                result: 'ok',
+                data: posts,
+                length: posts.length,
+                message: "Query list of Posts successfully"
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: null,
+            length: 0,
+            message: `Query list of Posts failed. Error ${error}`
+        });
+    }
+};
+
+//Query all created Posts from DB
+exports.readAllCreated = async function (req, res, next) {
+    try {
+        await Post.findAll({
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+
+            where: {
+                status: 'created'
+            },
+
+        }).then(posts => {
+            res.json({
+                result: 'ok',
+                data: posts,
+                length: posts.length,
+                message: "Query list of Posts successfully"
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: null,
+            length: 0,
+            message: `Query list of Posts failed. Error ${error}`
+        });
+    }
+};
+
+//Query all deleted Posts from DB
+exports.readAllDeleted = async function (req, res, next) {
+    try {
+        await Post.findAll({
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+
+            where: {
+                status: 'deleted'
+            },
+
+        }).then(posts => {
+            res.json({
+                result: 'ok',
+                data: posts,
+                length: posts.length,
+                message: "Query list of Posts successfully"
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: null,
+            length: 0,
+            message: `Query list of Posts failed. Error ${error}`
+        });
+    }
+};
+
+
+//Query all archivated Posts from DB
+exports.readAllArchivated = async function (req, res, next) {
+    try {
+        await Post.findAll({
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+
+            where: {
+                status: 'archivated'
+            },
+
+        }).then(posts => {
+            res.json({
+                result: 'ok',
+                data: posts,
+                length: posts.length,
+                message: "Query list of Posts successfully"
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: null,
+            length: 0,
+            message: `Query list of Posts failed. Error ${error}`
+        });
+    }
+};
+
 //Query Post by given id
 exports.findById = async function (req, res, next) {
     const {id} = req.params;
@@ -99,7 +212,10 @@ exports.findByUsermail = async function (req, res, next) {
         await Post.findAll({
             attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
             where: {
-                useremail: useremail
+                useremail: useremail,
+                status: {
+                    [Op.ne]: 'deleted'
+                }
             },
         }).then(posts => {
             res.json({
@@ -124,7 +240,10 @@ exports.findByCategorieId = async function (req, res, next) {
         await Post.findAll({
             attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
             where: {
-                categorieid: categorieid
+                categorieid: categorieid,
+                status: {
+                    [Op.ne]: 'deleted'
+                }
             },
         }).then(posts => {
             res.json({

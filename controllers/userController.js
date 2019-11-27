@@ -9,8 +9,8 @@ exports.create = async function (req, res, next) {
             email,
             phone_number,
             created_at,
-            rating,
-            user_status
+            rating: 5,
+            user_status: 'active'
         }, {
             fields: ["name", "email", "phone_number", "created_at", "rating", "user_status"]
         }).then(newUser => {
@@ -47,6 +47,58 @@ exports.readAll = async function (req, res, next) {
             data: [],
             length: 0,
             message: `Query list of Users failed. Error ${error}`
+        });
+    }
+};
+
+//Query all active Users from DB
+exports.readAllActive = async function (req, res, next) {
+    try {
+        await User.findAll({
+            attributes: ['id', 'name', 'email', 'phone_number', 'created_at', 'rating', 'user_status'],
+            where:{
+                user_status: 'active'
+            }
+        }).then(users => {
+            res.json({
+                result: 'ok',
+                data: users,
+                length: users.length,
+                message: "Query list of active Users successfully"
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: [],
+            length: 0,
+            message: `Query list of active Users failed. Error ${error}`
+        });
+    }
+};
+
+//Query all blocked Users from DB
+exports.readAllBlocked = async function (req, res, next) {
+    try {
+        await User.findAll({
+            attributes: ['id', 'name', 'email', 'phone_number', 'created_at', 'rating', 'user_status'],
+            where:{
+                user_status: 'blocked'
+            }
+        }).then(users => {
+            res.json({
+                result: 'ok',
+                data: users,
+                length: users.length,
+                message: "Query list of blocked Users successfully"
+            });
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: [],
+            length: 0,
+            message: `Query list of blocked Users failed. Error ${error}`
         });
     }
 };

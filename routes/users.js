@@ -9,6 +9,12 @@ router.post('/', userController.create);
 //Query all Users from DB
 router.get('/', userController.readAll);
 
+//Query all active Users from DB
+router.get('/active', userController.readAllActive);
+
+//Query all blocked Users from DB
+router.get('/blocked', userController.readAllBlocked);
+
 //Query User by given id
 router.get('/:id', userController.findById);
 
