@@ -7,7 +7,7 @@ const sequelize = new Sequelize(
         {
             dialect: 'postgres',
             schema: 'emarket',
-            host: 'https//144.91.105.5',
+            host: 'localhost',
             pool: {
                 max: 5,
                 min: 0,
