@@ -1,5 +1,7 @@
 const Post = require('../models/Post');
-const Op = Sequelize.Op;
+const Op = require('../databases/database').Op;
+
+
 //Insert Post
 exports.create = async function (req, res, next) {
     const {title, created_at, updated_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number} = req.body;

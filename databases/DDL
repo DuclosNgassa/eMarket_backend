@@ -1,29 +1,29 @@
-DROP TYPE fee_typ;
+--DROP TYPE fee_typ;
 CREATE TYPE fee_typ AS ENUM (
 	'negotiable',
 	'fixed',
 	'gift');
 
-DROP TYPE post_status;
+--DROP TYPE post_status;
 CREATE TYPE post_status AS ENUM (
 	'created',
 	'active',
 	'archivated',
 	'deleted');
 
-DROP TYPE post_typ;
+--DROP TYPE post_typ;
 CREATE TYPE post_typ AS ENUM (
 	'offer',
 	'search',
 	'all');
 
-DROP TYPE user_status;
+--DROP TYPE user_status;
 CREATE TYPE user_status AS ENUM (
 	'active',
 	'blocked');
 
--- Drop table
-DROP TABLE users;
+--DROP table
+--DROP TABLE users;
 CREATE TABLE users (
 	id serial NOT NULL,
 	"name" varchar(50) NULL,
@@ -37,8 +37,8 @@ CREATE TABLE users (
 );
 
 
--- Drop table
-DROP TABLE categories;
+--DROP table
+--DROP TABLE categories;
 CREATE TABLE categories (
 	id serial NOT NULL,
 	title varchar(50) NULL,
@@ -49,8 +49,8 @@ CREATE TABLE categories (
 );
 
 
--- Drop table
-DROP TABLE posts;
+--DROP table
+--DROP TABLE posts;
 CREATE TABLE posts (
 	id serial NOT NULL,
 	title varchar(50) NOT NULL,
@@ -74,8 +74,8 @@ ALTER TABLE posts ADD CONSTRAINT posts_categorie_id_fkey FOREIGN KEY (categoriei
 ALTER TABLE posts ADD CONSTRAINT posts_user_email_fkey FOREIGN KEY (useremail) REFERENCES users(email);
 
 
--- Drop table
-DROP TABLE images;
+--DROP table
+--DROP TABLE images;
 CREATE TABLE images (
 	id serial NOT NULL,
 	image_url varchar NOT NULL,
@@ -86,21 +86,22 @@ CREATE TABLE images (
 ALTER TABLE images ADD CONSTRAINT images_post_id_fkey FOREIGN KEY (postid) REFERENCES posts(id);
 
 
--- Drop table
-DROP TABLE favorits;
-CREATE TABLE favorits (
+--DROP TABLE emarket.favorits;
+CREATE TABLE emarket.favorits (
 	id serial NOT NULL,
 	useremail varchar(100) NULL,
 	created_at timestamp NULL DEFAULT now(),
 	postid int4 NOT NULL,
-	CONSTRAINT favorits_pkey PRIMARY KEY (id)
+	CONSTRAINT favorits_pkey PRIMARY KEY (id),
+	CONSTRAINT favorits_unique_useremail_postid UNIQUE (useremail, postid)
 );
-ALTER TABLE favorits ADD CONSTRAINT favorits_post_id_fkey FOREIGN KEY (postid) REFERENCES posts(id);
-ALTER TABLE favorits ADD CONSTRAINT favorits_user_email_fkey FOREIGN KEY (useremail) REFERENCES users(email);
+
+ALTER TABLE emarket.favorits ADD CONSTRAINT favorits_post_id_fkey FOREIGN KEY (postid) REFERENCES emarket.posts(id);
+ALTER TABLE emarket.favorits ADD CONSTRAINT favorits_user_email_fkey FOREIGN KEY (useremail) REFERENCES emarket.users(email);
 
 
--- Drop table
-DROP TABLE messages;
+--DROP table
+--DROP TABLE messages;
 CREATE TABLE messages (
 	id serial NOT NULL,
 	sender varchar(100) NULL,
