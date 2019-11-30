@@ -16,7 +16,7 @@ exports.create = async function (req, res, next) {
             fee_typ,
             city,
             quartier,
-            status: "created",
+            status: "active",
             rating: 5,
             useremail,
             categorieid,

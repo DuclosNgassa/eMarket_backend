@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 
+/*
 const sequelize = new Sequelize(
         'postgres', // db name
         'postgres', // username
@@ -16,7 +17,8 @@ const sequelize = new Sequelize(
             }
         }
     );
-/*
+*/
+
 const sequelize = new Sequelize(
         'postgres', // db name
         'armelduclosndanjingassa', // username
@@ -33,7 +35,7 @@ const sequelize = new Sequelize(
             }
         }
     );
-*/
+
 
 const Op = Sequelize.Op;
 module.exports = {
