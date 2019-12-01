@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 
-/*
 const sequelize = new Sequelize(
         'postgres', // db name
         'postgres', // username
@@ -8,7 +7,7 @@ const sequelize = new Sequelize(
         {
             dialect: 'postgres',
             schema: 'emarket',
-            host: 'localhost',
+            host: '144.91.105.5',
             pool: {
                 max: 5,
                 min: 0,
@@ -17,8 +16,9 @@ const sequelize = new Sequelize(
             }
         }
     );
-*/
 
+
+/*
 const sequelize = new Sequelize(
         'postgres', // db name
         'armelduclosndanjingassa', // username
@@ -35,6 +35,7 @@ const sequelize = new Sequelize(
             }
         }
     );
+*/
 
 
 const Op = Sequelize.Op;
