@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 
+
 const sequelize = new Sequelize(
         'postgres', // db name
         'postgres', // username
@@ -8,6 +9,7 @@ const sequelize = new Sequelize(
             dialect: 'postgres',
             schema: 'emarket',
             host: '144.91.105.5',
+            port: '5432',
             pool: {
                 max: 5,
                 min: 0,
