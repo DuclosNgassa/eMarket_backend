@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 
 const sequelize = new Sequelize(
-        'postgres', // db name
+        'emarket', // db name
         'postgres', // username
         'Ichbin1postgres',
         {
