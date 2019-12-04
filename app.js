@@ -10,6 +10,7 @@ const imagesRouter = require('./routes/images');
 const categoriesRouter = require('./routes/categories');
 const messagesRouter = require('./routes/messages');
 const favoritsRouter = require('./routes/favorits');
+const userNotificationRouter = require('./routes/userNotification');
 
 /*
 const { Pool } = require('pg');
@@ -35,6 +36,7 @@ app.use('/images', imagesRouter);
 app.use('/categories', categoriesRouter);
 app.use('/messages', messagesRouter);
 app.use('/favorits', favoritsRouter);
+app.use('/userNotification', userNotificationRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

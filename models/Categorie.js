@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../databases/database').sequelize;
-const Op = require('../databases/database').Op;
 
 const Post = require('./Post');
 

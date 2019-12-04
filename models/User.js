@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../databases/database').sequelize;
-const Op = require('../databases/database').Op;
 
 const Post = require('./Post');
 const Favorit = require('./Favorit');
 const Message = require('./Message');
+const UserNotification = require('./UserNotification');
 
 const User = sequelize.define('users', {
     id: {
@@ -45,5 +45,8 @@ Message.belongsTo(User, { foreignKey: 'sender', targetKey: 'email' });
 
 User.hasMany(Message, { foreignKey: 'receiver', sourceKey: 'email' });
 Message.belongsTo(User, { foreignKey: 'receiver', targetKey: 'email' });
+
+User.hasMany(UserNotification, { foreignKey: 'useremail', sourceKey: 'email' });
+UserNotification.belongsTo(User, { foreignKey: 'useremail', targetKey: 'email' });
 
 module.exports = User;

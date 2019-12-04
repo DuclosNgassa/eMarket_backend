@@ -1,22 +1,25 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../databases/database').sequelize;
 
-const Favorit = sequelize.define('favorits', {
+const UserNotification = sequelize.define('usernotification', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    useremail: {
+    title: {
         type: Sequelize.STRING(50),
+    },
+    message: {
+        type: Sequelize.STRING(500),
+    },
+    useremail: {
+        type: Sequelize.STRING(50)
     },
     created_at: {
         type: Sequelize.DATE
     },
-    postid: {
-        type: Sequelize.INTEGER
-    },
 }, {
     timestamps: false,
 });
-module.exports = Favorit;
+module.exports = UserNotification;
