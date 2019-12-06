@@ -16,10 +16,13 @@ const User = sequelize.define('users', {
         type: Sequelize.STRING(50),
     },
     email: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(50),
     },
     phone_number: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(50),
+    },
+    device_token: {
+        type: Sequelize.STRING(200),
     },
     created_at: {
         type: Sequelize.DATE
