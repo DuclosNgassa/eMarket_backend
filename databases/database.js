@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize');
 
 
-/*
 //Server configuration
 const sequelize = new Sequelize(
         'emarket', // db name
@@ -20,9 +19,7 @@ const sequelize = new Sequelize(
             }
         }
     );
-*/
-
-
+/*
 const sequelize = new Sequelize(
         'postgres', // db name
         'armelduclosndanjingassa', // username
@@ -39,6 +36,7 @@ const sequelize = new Sequelize(
             }
         }
     );
+*/
 
 const Op = Sequelize.Op;
 module.exports = {
