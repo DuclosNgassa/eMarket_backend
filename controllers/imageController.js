@@ -205,7 +205,8 @@ exports.delete = async function (req, res, next) {
 
 exports.deleteByUrl = async function (req, res, next) {
     const {url} = req.params;
-    const urlToRemove = "http://192.168.2.120:3000/images/" + url;
+    //const urlToRemove = "http://192.168.2.120:3000/images/" + url;
+    const urlToRemove = url;
     console.log('Url to delete: ');
     try {
         await Image.findAll({
@@ -234,7 +235,7 @@ exports.deleteByUrl = async function (req, res, next) {
             })
         });
     } catch (error) {
-        console.log("Errooooooor");
+        console.log("Error");
         res.json({
             result: 'failed',
             message: `Delete a Image failed. Error ${error}`,
