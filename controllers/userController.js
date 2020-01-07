@@ -1,4 +1,7 @@
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+
+//dotenv.config();
 
 //Insert User
 exports.create = async function (req, res, next) {
@@ -13,10 +16,18 @@ exports.create = async function (req, res, next) {
             rating: 5,
             user_status: 'active'
         }, {
-            fields: ["name", "email", "phone_number",  "device_token", "created_at", "rating", "user_status"]
+            fields: ["name", "email", "phone_number", "device_token", "created_at", "rating", "user_status"]
         }).then(newUser => {
+
+            //Create a Token
+            const token = jwt.sign({
+                    id: newUser.id,
+                },
+                process.env.TOKEN_SECRET);
+            res.header('auth-token', token);
             res.send({
                 result: 'ok',
+                token: token,
                 data: newUser
             });
         });
@@ -33,7 +44,7 @@ exports.create = async function (req, res, next) {
 exports.readAll = async function (req, res, next) {
     try {
         await User.findAll({
-            attributes: ['id', 'name', 'email', 'phone_number',  'device_token', 'created_at', 'rating', 'user_status'],
+            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'created_at', 'rating', 'user_status'],
         }).then(users => {
             res.json({
                 result: 'ok',
@@ -57,7 +68,7 @@ exports.readAllActive = async function (req, res, next) {
     try {
         await User.findAll({
             attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'created_at', 'rating', 'user_status'],
-            where:{
+            where: {
                 user_status: 'active'
             }
         }).then(users => {
@@ -83,7 +94,7 @@ exports.readAllBlocked = async function (req, res, next) {
     try {
         await User.findAll({
             attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'created_at', 'rating', 'user_status'],
-            where:{
+            where: {
                 user_status: 'blocked'
             }
         }).then(users => {

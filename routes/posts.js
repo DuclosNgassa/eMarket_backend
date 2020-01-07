@@ -2,12 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const postController = require('../controllers/postController');
+const auth = require('../controllers/verifyToken');
+
 
 //Insert Post
-router.post('/', postController.create);
+router.post('/', auth, postController.create);
 
 //Query all Posts from DB
-router.get('/', postController.readAll);
+router.get('/', auth, postController.readAll);
 
 //Query all active Posts from DB
 router.get('/active', postController.readAllActive);

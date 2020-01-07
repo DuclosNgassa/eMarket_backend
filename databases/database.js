@@ -1,33 +1,19 @@
 const Sequelize = require('sequelize');
+const dotenv = require('dotenv');
 
+dotenv.config();
 
 //Server configuration
-const sequelize = new Sequelize(
-        'emarket', // db name
-        'postgres', // username
-        'Ichbin1postgres',
-        {
-            dialect: 'postgres',
-            schema: 'emarket',
-            host: '144.91.105.5',
-            port: '5432',
-            pool: {
-                max: 5,
-                min: 0,
-                require: 30000,
-                idle: 10000
-            }
-        }
-    );
 /*
 const sequelize = new Sequelize(
-        'postgres', // db name
-        'armelduclosndanjingassa', // username
-        '123456',
+        process.env.DB_NAME_SERVER, // db name
+        process.env.DB_USER_NAME_SERVER, // username
+        process.env.DB_PASSWORD_SERVER,
         {
-            dialect: 'postgres',
-            schema: 'emarket',
-            host: 'localhost',
+            dialect: process.env.DIALECT_SERVER,
+            schema: process.env.SCHEMA_SERVER,
+            host: process.env.HOST_SERVER,
+            port: process.env.PORT_SERVER,
             pool: {
                 max: 5,
                 min: 0,
@@ -37,6 +23,24 @@ const sequelize = new Sequelize(
         }
     );
 */
+
+// Local configuration
+const sequelize = new Sequelize(
+    process.env.DB_NAME_LOCAL, // db name
+    process.env.DB_USER_NAME_LOCAL, // username
+    process.env.DB_PASSWORD_LOCAL,
+    {
+        dialect: process.env.DIALECT_LOCAL,
+        schema: process.env.SCHEMA_LOCAL,
+        host: process.env.HOST_LOCAL,
+        pool: {
+            max: 5,
+            min: 0,
+            require: 30000,
+            idle: 10000
+        }
+    }
+);
 
 const Op = Sequelize.Op;
 module.exports = {
