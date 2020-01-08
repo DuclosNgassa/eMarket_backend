@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const auth = require('../controllers/authenticationController');
 
 const messageController = require('../controllers/messageController');
 
 //Insert Message
-router.post('/', messageController.create);
+router.post('/', auth.authenticate, messageController.create);
 
 //Query all Messages from DB
 router.get('/', messageController.readAll);
@@ -25,12 +26,12 @@ router.get('/sender/:sender', messageController.findBySenderEmail);
 router.get('/receiver/:receiver', messageController.findByReceiverEmail);
 
 //Update Message
-router.put('/:id', messageController.update);
+router.put('/:id', auth.authenticate, messageController.update);
 
 //Delete a Message
-router.delete('/:id', messageController.delete);
+router.delete('/:id', auth.authenticate, messageController.delete);
 
 //delete a Message by given postid
-router.delete('/post/:postid', messageController.deleteByPostId);
+router.delete('/post/:postid', auth.authenticate, messageController.deleteByPostId);
 
 module.exports = router;

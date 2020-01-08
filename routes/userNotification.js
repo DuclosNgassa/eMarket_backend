@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const auth = require('../controllers/authenticationController');
 
 const userNotificationController = require('../controllers/userNotificationController');
 
 //Insert Favorite
-router.post('/', userNotificationController.create);
+router.post('/', auth.authenticate, userNotificationController.create);
 
 //Query all Favorits from DB
 router.get('/', userNotificationController.readAll);
@@ -16,12 +17,12 @@ router.get('/:id', userNotificationController.findById);
 router.get('/user/:useremail', userNotificationController.findbyUserEmail);
 
 //Update Favorit
-router.put('/:id', userNotificationController.update);
+router.put('/:id', auth.authenticate, userNotificationController.update);
 
 //Delete a Favorit
-router.delete('/:id', userNotificationController.delete);
+router.delete('/:id', auth.authenticate, userNotificationController.delete);
 
 //delete a Favorit by given postid
-router.delete('/post/:useremail', userNotificationController.deleteByUseremail);
+router.delete('/post/:useremail', auth.authenticate, userNotificationController.deleteByUseremail);
 
 module.exports = router;

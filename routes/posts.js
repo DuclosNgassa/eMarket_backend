@@ -2,20 +2,20 @@ const express = require("express");
 const router = express.Router();
 
 const postController = require('../controllers/postController');
-const auth = require('../controllers/verifyToken');
+const auth = require('../controllers/authenticationController');
 
 
 //Insert Post
-router.post('/', auth, postController.create);
+router.post('/', auth.authenticate, postController.create);
 
 //Query all Posts from DB
-router.get('/', auth, postController.readAll);
+router.get('/', auth.authenticate, postController.readAll);
 
 //Query all active Posts from DB
 router.get('/active', postController.readAllActive);
 
 //Query all created Posts from DB
-router.get('/created', postController.readAllCreated);
+router.get('/created', auth.authenticate, postController.readAllCreated);
 
 //Query all deleted Posts from DB
 router.get('/deleted', postController.readAllDeleted);
@@ -33,10 +33,10 @@ router.get('/user/:useremail',postController.findByUsermail);
 router.get('/categorie/:categorieid', postController.findByCategorieId);
 
 //Update Post
-router.put('/:id', postController.update);
+router.put('/:id', auth.authenticate, postController.update);
 
 //Delete a Post
-router.delete('/:id', postController.delete);
+router.delete('/:id', auth.authenticate, postController.delete);
 
 
 module.exports = router;

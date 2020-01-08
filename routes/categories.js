@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const auth = require('../controllers/authenticationController');
 
 const categorieController = require('../controllers/categorieController');
 
 //Insert Categorie
-router.post('/', categorieController.create);
+router.post('/', auth.authenticate, categorieController.create);
 
 //Query all Categories from DB
 router.get('/', categorieController.readAll);
@@ -16,9 +17,9 @@ router.get('/:id', categorieController.findById);
 router.get('/parent/:parentid', categorieController.findByParentId);
 
 //Update Categorie
-router.put('/:id', categorieController.update);
+router.put('/:id', auth.authenticate, categorieController.update);
 
 //Delete a Categorie
-router.delete('/:id', categorieController.delete);
+router.delete('/:id', auth.authenticate, categorieController.delete);
 
 module.exports = router;

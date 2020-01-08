@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const auth = require('../controllers/authenticationController');
 
 //dotenv.config();
 
@@ -7,7 +8,7 @@ const jwt = require('jsonwebtoken');
 exports.create = async function (req, res, next) {
     const {name, email, phone_number, device_token, created_at, rating, user_status} = req.body;
     try {
-        await User.create({
+        let newUser = await User.create({
             name,
             email,
             phone_number,
@@ -17,20 +18,23 @@ exports.create = async function (req, res, next) {
             user_status: 'active'
         }, {
             fields: ["name", "email", "phone_number", "device_token", "created_at", "rating", "user_status"]
-        }).then(newUser => {
-
+        });
+        if (newUser) {
             //Create a Token
-            const token = jwt.sign({
-                    id: newUser.id,
-                },
-                process.env.TOKEN_SECRET);
+            const token = auth.createToken(newUser.id);
             res.header('auth-token', token);
             res.send({
                 result: 'ok',
                 token: token,
                 data: newUser
             });
-        });
+        } else {
+            res.send({
+                result: 'failed',
+                data: {},
+                message: `Insert a new User failed. Error: ${error}`
+            });
+        }
     } catch (error) {
         res.send({
             result: 'failed',
@@ -149,11 +153,21 @@ exports.findbyEmail = async function (req, res, next) {
                 email: email
             },
         }).then(user => {
-            res.json({
-                result: 'ok',
-                data: user,
-                message: "Query User by email successfully"
-            });
+            if (user) {
+                const token = auth.createToken();
+                res.json({
+                    result: 'ok',
+                    data: user,
+                    token: token,
+                    message: "Query User by email successfully"
+                });
+            } else {
+                res.json({
+                    result: 'ok',
+                    data: user,
+                    message: "Query User by email successfully"
+                });
+            }
         });
     } catch (error) {
         res.json({
