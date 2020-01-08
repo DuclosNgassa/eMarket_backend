@@ -154,7 +154,7 @@ exports.findbyEmail = async function (req, res, next) {
             },
         }).then(user => {
             if (user) {
-                const token = auth.createToken();
+                const token = auth.createToken(user.id);
                 res.json({
                     result: 'ok',
                     data: user,

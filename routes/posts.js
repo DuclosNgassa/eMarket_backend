@@ -35,6 +35,9 @@ router.get('/categorie/:categorieid', postController.findByCategorieId);
 //Update Post
 router.put('/:id', auth.authenticate, postController.update);
 
+//Update Post
+router.put('/view/:id', postController.updateViewCount);
+
 //Delete a Post
 router.delete('/:id', auth.authenticate, postController.delete);
 

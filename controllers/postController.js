@@ -305,6 +305,58 @@ exports.update = async function (req, res, next) {
     }
 };
 
+//Update Post
+exports.updateViewCount = async function (req, res, next) {
+    const {id} = req.params;
+    console.log('PostView-ID: ' + id);
+    try {
+        await Post.findOne({
+            where: {id: id},
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+        }).then(async post => {
+            console.log('PostView: ' + JSON.stringify(post));
+
+            let viewCount = post.count_view + 1;
+            let newPost = await post.update({
+                title: post.title,
+                created_at: post.created_at,
+                updated_at: post.updated_at,
+                post_typ: post.post_typ,
+                description: post.description,
+                fee: post.fee,
+                fee_typ: post.fee_typ,
+                city: post.city,
+                quartier: post.quartier,
+                status: post.status,
+                rating: post.rating,
+                useremail: post.useremail,
+                categorieid: post.categorieid,
+                phone_number: post.phone_number,
+                count_view: viewCount
+            });
+            if(newPost) {
+                res.json({
+                    result: 'ok',
+                    data: newPost,
+                    message: 'Update post successfully'
+                });
+            }else{
+                res.json({
+                    result: 'failed',
+                    data: null,
+                    message: `Cannot find post to update. Error: ${error}`
+                });
+            }
+        });
+    } catch (error) {
+        res.json({
+            result: 'failed',
+            data: null,
+            message: `Cannot find post to update. Error: ${error}`
+        });
+    }
+};
+
 //Delete a Post
 exports.delete = async function (req, res, next) {
     const {id} = req.params;
