@@ -18,16 +18,16 @@ router.get('/active', postController.readAllActive);
 router.get('/created', auth.authenticate, postController.readAllCreated);
 
 //Query all deleted Posts from DB
-router.get('/deleted', postController.readAllDeleted);
+router.get('/deleted', auth.authenticate, postController.readAllDeleted);
 
 //Query all archivated Posts from DB
-router.get('/archivated', postController.readAllArchivated);
+router.get('/archivated', auth.authenticate, postController.readAllArchivated);
 
 //Query Post by given id
 router.get('/:id', postController.findById);
 
 //Query Posts by given useremail
-router.get('/user/:useremail',postController.findByUsermail);
+router.get('/user/:useremail', postController.findByUsermail);
 
 //Query Posts by given categorieid
 router.get('/categorie/:categorieid', postController.findByCategorieId);

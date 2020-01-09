@@ -5,7 +5,7 @@ const auth = require('../controllers/authenticationController');
 const imageController = require('../controllers/imageController');
 
 //Insert Image
-router.post('/', imageController.create);
+router.post('/', auth.authenticate, imageController.create);
 
 router.post('/upload', auth.authenticate, imageController.upload);
 
