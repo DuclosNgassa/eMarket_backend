@@ -4,7 +4,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 //Server configuration
-/*
 const sequelize = new Sequelize(
         process.env.DB_NAME_SERVER, // db name
         process.env.DB_USER_NAME_SERVER, // username
@@ -22,9 +21,9 @@ const sequelize = new Sequelize(
             }
         }
     );
-*/
 
 // Local configuration
+/*
 const sequelize = new Sequelize(
     process.env.DB_NAME_LOCAL, // db name
     process.env.DB_USER_NAME_LOCAL, // username
@@ -41,6 +40,7 @@ const sequelize = new Sequelize(
         }
     }
 );
+*/
 
 const Op = Sequelize.Op;
 module.exports = {
