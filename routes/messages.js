@@ -8,22 +8,22 @@ const messageController = require('../controllers/messageController');
 router.post('/', auth.authenticate, messageController.create);
 
 //Query all Messages from DB
-router.get('/', messageController.readAll);
+router.get('/', auth.authenticate, messageController.readAll);
 
 //Query Message by given id
-router.get('/:id', messageController.findById);
+router.get('/:id', auth.authenticate, messageController.findById);
 
 //Query Message by given postid
-router.get('/post/:postid', messageController.findByPostId);
+router.get('/post/:postid', auth.authenticate, messageController.findByPostId);
 
 //Query Message by email
-router.get('/email/:email', messageController.findByEmail);
+router.get('/email/:email', auth.authenticate, messageController.findByEmail);
 
 //Query Message by given sender
-router.get('/sender/:sender', messageController.findBySenderEmail);
+router.get('/sender/:sender', auth.authenticate, messageController.findBySenderEmail);
 
 //Query Message by given receiver
-router.get('/receiver/:receiver', messageController.findByReceiverEmail);
+router.get('/receiver/:receiver', auth.authenticate, messageController.findByReceiverEmail);
 
 //Update Message
 router.put('/:id', auth.authenticate, messageController.update);

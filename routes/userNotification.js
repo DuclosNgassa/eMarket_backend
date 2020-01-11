@@ -8,13 +8,13 @@ const userNotificationController = require('../controllers/userNotificationContr
 router.post('/', auth.authenticate, userNotificationController.create);
 
 //Query all Favorits from DB
-router.get('/', userNotificationController.readAll);
+router.get('/', auth.authenticate, userNotificationController.readAll);
 
 //Query Favorit by given id
-router.get('/:id', userNotificationController.findById);
+router.get('/:id', auth.authenticate, userNotificationController.findById);
 
 //Query Favorit by given useremail
-router.get('/user/:useremail', userNotificationController.findbyUserEmail);
+router.get('/user/:useremail', auth.authenticate, userNotificationController.findbyUserEmail);
 
 //Update Favorit
 router.put('/:id', auth.authenticate, userNotificationController.update);
