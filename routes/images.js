@@ -10,7 +10,7 @@ router.post('/', auth.authenticate, imageController.create);
 router.post('/upload', auth.authenticate, imageController.upload);
 
 //Query all Images from DB
-router.get('/', imageController.readAll);
+router.get('/', auth.authenticate, imageController.readAll);
 
 //Query Image by given id
 router.get('/:id', imageController.findById);
