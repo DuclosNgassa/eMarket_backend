@@ -22,9 +22,10 @@ const Message = sequelize.define('messages', {
     body: {
         type: Sequelize.STRING(1000)
     },
-    opened: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
+    read: {
+        type: Sequelize.SMALLINT,
+        defaultValue: 0,
+        allowNull: false
     },
 
 }, {

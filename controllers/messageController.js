@@ -1,7 +1,7 @@
 const Message = require('../models/Message');
 
 exports.create = async function (req, res, next) {
-    const {sender, receiver, created_at, postid, body, opened} = req.body;
+    const {sender, receiver, created_at, postid, body, read} = req.body;
     try {
         let newFavorit = await Message.create({
             sender,
@@ -9,9 +9,9 @@ exports.create = async function (req, res, next) {
             created_at,
             postid,
             body,
-            opened
+            read
         }, {
-            fields: ["sender", "receiver", "created_at", "postid", "body", "opened"]
+            fields: ["sender", "receiver", "created_at", "postid", "body", "read"]
         });
         if (newFavorit) {
             res.send({
@@ -37,7 +37,7 @@ exports.create = async function (req, res, next) {
 exports.readAll = async function (req, res, next) {
     try {
         await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
         }).then(messages => {
             res.json({
                 result: 'ok',
@@ -60,7 +60,7 @@ exports.findById = async function (req, res, next) {
     const {id} = req.params;
     try {
         await Message.findOne({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
             where: {
                 id: id
             },
@@ -84,7 +84,7 @@ exports.findByPostId = async function (req, res, next) {
     const {postid} = req.params;
     try {
         await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
             where: {
                 postid: postid
             },
@@ -108,14 +108,16 @@ exports.findByEmail = async function (req, res, next) {
     const {email} = req.params;
     try {
         let messageSent = await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
             where: {
                 sender: email
             }
         });
 
+        console.log("findByEmail -> messageSent: " + JSON.stringify(messageSent));
+
         await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
             where: {
                 receiver: email
             }
@@ -141,7 +143,7 @@ exports.findBySenderEmail = async function (req, res, next) {
     const {sender} = req.params;
     try {
         await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
             where: {
                 sender: sender
             },
@@ -165,7 +167,7 @@ exports.findByReceiverEmail = async function (req, res, next) {
     const {receiver} = req.params;
     try {
         await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
             where: {
                 receiver: receiver
             },
@@ -187,10 +189,10 @@ exports.findByReceiverEmail = async function (req, res, next) {
 
 exports.update = async function (req, res, next) {
     const {id} = req.params;
-    const {sender, receiver, created_at, postid, body, opened} = req.body;
+    const {sender, receiver, created_at, postid, body, read} = req.body;
     try {
         await Message.findOne({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
             where: {
                 id
             }
@@ -201,7 +203,7 @@ exports.update = async function (req, res, next) {
                 created_at: created_at ? created_at : message.created_at,
                 postid: postid ? postid : message.postid,
                 body: body ? body : message.body,
-                opened: opened ? opened : message.opened
+                read: read ? read : message.read
             });
 
             res.json({
