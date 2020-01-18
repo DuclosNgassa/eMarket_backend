@@ -17,13 +17,13 @@ router.get('/:id', auth.authenticate, messageController.findById);
 router.get('/post/:postid', auth.authenticate, messageController.findByPostId);
 
 //Query Message by email
-router.get('/email', auth.authenticate, messageController.findByEmail);
+router.get('/email/:email', auth.authenticate, messageController.findByEmail);
 
 //Query Message by given sender
-router.get('/sender', auth.authenticate, messageController.findBySenderEmail);
+router.get('/sender/:sender', auth.authenticate, messageController.findBySenderEmail);
 
 //Query Message by given receiver
-router.get('/receiver', auth.authenticate, messageController.findByReceiverEmail);
+router.get('/receiver/:receiver', auth.authenticate, messageController.findByReceiverEmail);
 
 //Update Message
 router.put('/:id', auth.authenticate, messageController.update);

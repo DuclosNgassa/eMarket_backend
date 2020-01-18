@@ -105,9 +105,7 @@ exports.findByPostId = async function (req, res, next) {
 };
 
 exports.findByEmail = async function (req, res, next) {
-    const {email} = req.body;
-
-   // const {email} = req.params;
+    const {email} = req.params;
     try {
         let messageSent = await Message.findAll({
             attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
@@ -118,20 +116,33 @@ exports.findByEmail = async function (req, res, next) {
 
         console.log("findByEmail -> messageSent: " + JSON.stringify(messageSent));
 
-        await Message.findAll({
+        let messageReceive = await Message.findAll({
             attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
             where: {
                 receiver: email
             }
-        }).then(messages => {
+        });
 
-            let allMessage = messages.concat(messageSent);
+        if(messageReceive){
+            let allMessage = messageReceive.concat(messageSent);
             res.json({
                 result: 'ok',
                 data: allMessage,
                 message: "Query Message by email successfully"
             });
-        });
+        }else if(messageSent){
+            res.json({
+                result: 'ok',
+                data: messageSent,
+                message: "Query Message by email successfully"
+            });
+        } else {
+            res.json({
+                result: 'ok',
+                data: [],
+                message: "Query Message by email successfully"
+            });
+        }
     } catch (error) {
         res.json({
             result: 'failed',
@@ -142,21 +153,27 @@ exports.findByEmail = async function (req, res, next) {
 };
 
 exports.findBySenderEmail = async function (req, res, next) {
-    const {sender} = req.body;
-    //const {sender} = req.params;
+    const {sender} = req.params;
     try {
-        await Message.findAll({
+        let messages = await Message.findAll({
             attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
             where: {
                 sender: sender
             },
-        }).then(messages => {
+        });
+        if (messages) {
             res.json({
                 result: 'ok',
                 data: messages,
                 message: "Query Message by sender successfully"
             });
-        });
+        }else {
+            res.json({
+                result: 'ok',
+                data: {},
+                message: 'Query Message by sender'
+            });
+        }
     } catch (error) {
         res.json({
             result: 'failed',
@@ -167,20 +184,27 @@ exports.findBySenderEmail = async function (req, res, next) {
 };
 
 exports.findByReceiverEmail = async function (req, res, next) {
-    const {receiver} = req.body;
+    const {receiver} = req.params;
     try {
-        await Message.findAll({
+        let messages = await Message.findAll({
             attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
             where: {
                 receiver: receiver
             },
-        }).then(messages => {
+        });
+        if (messages) {
             res.json({
                 result: 'ok',
                 data: messages,
                 message: "Query Message by receiver successfully"
             });
-        });
+        }else {
+            res.json({
+                result: 'ok',
+                data: {},
+                message: "Query Message by receiver."
+            });
+        }
     } catch (error) {
         res.json({
             result: 'failed',
