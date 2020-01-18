@@ -105,7 +105,9 @@ exports.findByPostId = async function (req, res, next) {
 };
 
 exports.findByEmail = async function (req, res, next) {
-    const {email} = req.params;
+    const {email} = req.body;
+
+   // const {email} = req.params;
     try {
         let messageSent = await Message.findAll({
             attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
@@ -140,7 +142,8 @@ exports.findByEmail = async function (req, res, next) {
 };
 
 exports.findBySenderEmail = async function (req, res, next) {
-    const {sender} = req.params;
+    const {sender} = req.body;
+    //const {sender} = req.params;
     try {
         await Message.findAll({
             attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
@@ -164,7 +167,7 @@ exports.findBySenderEmail = async function (req, res, next) {
 };
 
 exports.findByReceiverEmail = async function (req, res, next) {
-    const {receiver} = req.params;
+    const {receiver} = req.body;
     try {
         await Message.findAll({
             attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],

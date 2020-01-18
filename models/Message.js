@@ -25,7 +25,7 @@ const Message = sequelize.define('messages', {
     read: {
         type: Sequelize.SMALLINT,
         defaultValue: 0,
-        allowNull: false
+        allowNull: false,
     },
 
 }, {
