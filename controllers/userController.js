@@ -1,8 +1,5 @@
 const User = require('../models/User');
-const jwt = require('jsonwebtoken');
 const auth = require('../controllers/authenticationController');
-
-//dotenv.config();
 
 //Insert User
 exports.create = async function (req, res, next) {

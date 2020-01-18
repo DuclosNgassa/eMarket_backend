@@ -20,10 +20,9 @@ INSERT INTO emarket.categories (title,parentid,icon) VALUES
 ,('Concert',18,NULL)
 ,('Mariage',18,NULL)
 ,('Anniversaire',18,NULL)
-,('Accessoires de maison',18,NULL)
-;
+,('Autres Évènementiel',18,NULL);
+
 INSERT INTO emarket.categories (title,parentid,icon) VALUES
-('Autres Évènementiel',18,NULL)
 ,('Prestation de service',NULL,'0xe8f9')
 ,('Restaurant',24,NULL)
 ,('Service traiteur',24,NULL)

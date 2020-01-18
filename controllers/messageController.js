@@ -1,16 +1,17 @@
 const Message = require('../models/Message');
 
 exports.create = async function (req, res, next) {
-    const {sender, receiver, created_at, postid, body} = req.body;
+    const {sender, receiver, created_at, postid, body, opened} = req.body;
     try {
         let newFavorit = await Message.create({
             sender,
             receiver,
             created_at,
             postid,
-            body
+            body,
+            opened
         }, {
-            fields: ["sender", "receiver", "created_at", "postid", "body"]
+            fields: ["sender", "receiver", "created_at", "postid", "body", "opened"]
         });
         if (newFavorit) {
             res.send({
@@ -36,7 +37,7 @@ exports.create = async function (req, res, next) {
 exports.readAll = async function (req, res, next) {
     try {
         await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
         }).then(messages => {
             res.json({
                 result: 'ok',
@@ -59,7 +60,7 @@ exports.findById = async function (req, res, next) {
     const {id} = req.params;
     try {
         await Message.findOne({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
             where: {
                 id: id
             },
@@ -83,7 +84,7 @@ exports.findByPostId = async function (req, res, next) {
     const {postid} = req.params;
     try {
         await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
             where: {
                 postid: postid
             },
@@ -107,14 +108,14 @@ exports.findByEmail = async function (req, res, next) {
     const {email} = req.params;
     try {
         let messageSent = await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
             where: {
                 sender: email
             }
         });
 
         await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
             where: {
                 receiver: email
             }
@@ -140,7 +141,7 @@ exports.findBySenderEmail = async function (req, res, next) {
     const {sender} = req.params;
     try {
         await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
             where: {
                 sender: sender
             },
@@ -164,7 +165,7 @@ exports.findByReceiverEmail = async function (req, res, next) {
     const {receiver} = req.params;
     try {
         await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
             where: {
                 receiver: receiver
             },
@@ -186,10 +187,10 @@ exports.findByReceiverEmail = async function (req, res, next) {
 
 exports.update = async function (req, res, next) {
     const {id} = req.params;
-    const {sender, receiver, created_at, postid, body} = req.body;
+    const {sender, receiver, created_at, postid, body, opened} = req.body;
     try {
         await Message.findOne({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body'],
+            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'opened'],
             where: {
                 id
             }
@@ -199,7 +200,8 @@ exports.update = async function (req, res, next) {
                 receiver: receiver ? receiver : message.receiver,
                 created_at: created_at ? created_at : message.created_at,
                 postid: postid ? postid : message.postid,
-                body: body ? body : message.body
+                body: body ? body : message.body,
+                opened: opened ? opened : message.opened
             });
 
             res.json({

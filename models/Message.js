@@ -22,6 +22,10 @@ const Message = sequelize.define('messages', {
     body: {
         type: Sequelize.STRING(1000)
     },
+    opened: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    },
 
 }, {
     timestamps: false,
