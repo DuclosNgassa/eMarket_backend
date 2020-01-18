@@ -37,7 +37,7 @@ exports.create = async function (req, res, next) {
 exports.readAll = async function (req, res, next) {
     try {
         await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
+            attributes: ["id", "sender", "receiver", "created_at", "postid", "body", "read"],
         }).then(messages => {
             res.json({
                 result: 'ok',
@@ -60,7 +60,7 @@ exports.findById = async function (req, res, next) {
     const {id} = req.params;
     try {
         await Message.findOne({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
+            attributes: ["id", "sender", "receiver", "created_at", "postid", "body", "read"],
             where: {
                 id: id
             },
@@ -84,7 +84,7 @@ exports.findByPostId = async function (req, res, next) {
     const {postid} = req.params;
     try {
         await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
+            attributes: ["id", "sender", "receiver", "created_at", "postid", "body", "read"],
             where: {
                 postid: postid
             },
@@ -108,7 +108,7 @@ exports.findByEmail = async function (req, res, next) {
     const {email} = req.params;
     try {
         let messageSent = await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
+            attributes: ["id", "sender", "receiver", "created_at", "postid", "body", "read"],
             where: {
                 sender: email
             }
@@ -117,7 +117,7 @@ exports.findByEmail = async function (req, res, next) {
         console.log("findByEmail -> messageSent: " + JSON.stringify(messageSent));
 
         let messageReceive = await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
+            attributes: ["id", "sender", "receiver", "created_at", "postid", "body", "read"],
             where: {
                 receiver: email
             }
@@ -156,7 +156,7 @@ exports.findBySenderEmail = async function (req, res, next) {
     const {sender} = req.params;
     try {
         let messages = await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
+            attributes: ["id", "sender", "receiver", "created_at", "postid", "body", "read"],
             where: {
                 sender: sender
             },
@@ -187,7 +187,7 @@ exports.findByReceiverEmail = async function (req, res, next) {
     const {receiver} = req.params;
     try {
         let messages = await Message.findAll({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
+            attributes: ["id", "sender", "receiver", "created_at", "postid", "body", "read"],
             where: {
                 receiver: receiver
             },
@@ -219,7 +219,7 @@ exports.update = async function (req, res, next) {
     const {sender, receiver, created_at, postid, body, read} = req.body;
     try {
         await Message.findOne({
-            attributes: ['id', 'sender', 'receiver', 'created_at', 'postid', 'body', 'read'],
+            attributes: ["id", "sender", "receiver", "created_at", "postid", "body", "read"],
             where: {
                 id
             }

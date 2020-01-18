@@ -27,7 +27,7 @@ exports.create = async function (req, res, next) {
 exports.readAll = async function (req, res, next) {
     try {
         await Favorit.findAll({
-            attributes: ['id', 'useremail', 'created_at', 'postid'],
+            attributes: ["id", "useremail", "created_at", "postid"],
         }).then(favorits => {
                 res.json({
                     result: 'ok',
@@ -51,7 +51,7 @@ exports.findById = async function (req, res, next) {
     const {id} = req.params;
     try {
         await Favorit.findOne({
-            attributes: ['id', 'useremail', 'created_at', 'postid'],
+            attributes: ["id", "useremail", "created_at", "postid"],
             where: {
                 id: id
             },
@@ -75,7 +75,7 @@ exports.findByPostId = async function (req, res, next) {
     const {postid} = req.params;
     try {
         await Favorit.findAll({
-            attributes: ['id', 'useremail', 'created_at', 'postid'],
+            attributes: ["id", "useremail", "created_at", "postid"],
             where: {
                 postid: postid
             },
@@ -97,13 +97,15 @@ exports.findByPostId = async function (req, res, next) {
 
 exports.findbyUserEmail = async function (req, res, next) {
     const {useremail} = req.params;
+    console.log('findFavoritsbyUserEmail: ' + useremail);
     try {
         await Favorit.findAll({
-            attributes: ['id', 'useremail', 'created_at', 'postid'],
+            attributes: ["id", "useremail", "created_at", "postid"],
             where: {
                 useremail: useremail
             },
         }).then(favorits => {
+            console.log('findbyUserEmail -> results: ' + JSON.stringify(favorits));
             res.json({
                 result: 'ok',
                 data: favorits,
@@ -124,7 +126,7 @@ exports.update = async function (req, res, next) {
     const {useremail, created_at, postid} = req.body;
     try {
         await Favorit.findOne({
-            attributes: ['id', 'useremail', 'created_at', 'postid'],
+            attributes: ["id", "useremail", "created_at", "postid"],
             where: {
                 id
             }
