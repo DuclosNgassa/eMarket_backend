@@ -219,8 +219,10 @@ exports.update = async function (req, res, next) {
                 rating: rating ? rating : user.rating,
                 user_status: user_status ? user_status : user.user_status,
             }).then(user => {
+                const token = auth.createToken(user.id);
                 res.json({
                     result: 'ok',
+                    token: token,
                     data: user,
                     message: 'Update user successfully'
                 });
