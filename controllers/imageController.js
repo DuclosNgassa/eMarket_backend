@@ -205,8 +205,8 @@ exports.delete = async function (req, res, next) {
 
 exports.deleteByUrl = async function (req, res, next) {
     const {url} = req.params;
-    const urlToRemove = "http://144.91.105.5:3000/images/" + url;
-    //const urlToRemove = url;
+    //const urlToRemove = "http://144.91.105.5:3000/images/" + url;
+    const urlToRemove = "https://emarket.kmerconsulting.com/images/" + url;
     console.log('Url to delete: ');
     try {
         await Image.findAll({
