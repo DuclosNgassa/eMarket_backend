@@ -36,7 +36,7 @@ exports.create = async function (req, res, next) {
 
 //Set storage engine
 const Storage = multer.diskStorage({
-    destination: './public/images/',
+    destination: './public/img/',
     filename: (req, file, cb) => {
         const fileName = file.originalname.split('.')[0] +
             '-' +
@@ -176,8 +176,8 @@ exports.delete = async function (req, res, next) {
             },
         }).then(images => {
             images.forEach(image => {
-                let filePath = image.image_url.split('/images')[1];
-                filePath = './public/images' + filePath;
+                let filePath = image.image_url.split('/img')[1];
+                filePath = './public/img' + filePath;
                 console.log('Imagepath to delete: ' + filePath);
                 fs.unlinkSync(filePath);
             });
@@ -205,8 +205,8 @@ exports.delete = async function (req, res, next) {
 
 exports.deleteByUrl = async function (req, res, next) {
     const {url} = req.params;
-    //const urlToRemove = "http://144.91.105.5:3000/images/" + url;
-    const urlToRemove = "https://emarket.kmerconsulting.com/images/" + url;
+    //const urlToRemove = "http://144.91.105.5:3000/img/" + url;
+    const urlToRemove = "https://emarket.kmerconsulting.com/img/" + url;
     console.log('Url to delete: ');
     try {
         await Image.findAll({
@@ -216,8 +216,8 @@ exports.deleteByUrl = async function (req, res, next) {
             },
         }).then(images => {
             images.forEach(image => {
-                let filePath = image.image_url.split('/images')[1];
-                filePath = './public/images' + filePath;
+                let filePath = image.image_url.split('/img')[1];
+                filePath = './public/img' + filePath;
                 console.log('Imagepath to delete: ' + filePath);
                 fs.unlinkSync(filePath);
             });
@@ -255,8 +255,8 @@ exports.deleteByPostId = async function (req, res, next) {
         });
 
         images.forEach(image => {
-            let filePath = image.image_url.split('/images')[1];
-            filePath = './public/images/' + filePath;
+            let filePath = image.image_url.split('/img')[1];
+            filePath = './public/img/' + filePath;
             console.log('Imagepath: ' + filePath);
             fs.unlinkSync(filePath);
         });
