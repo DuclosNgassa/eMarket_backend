@@ -35,7 +35,7 @@ const Post = sequelize.define('posts', {
     city: {
         type: Sequelize.STRING(50)
     },
-    quartier: {
+    quarter: {
         type: Sequelize.STRING(50)
     },
     status: {

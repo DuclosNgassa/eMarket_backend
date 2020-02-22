@@ -61,7 +61,7 @@ CREATE TABLE posts (
 	fee numeric NULL,
 	fee_typ fee_typ NULL,
 	city varchar(50) NULL,
-	quartier varchar(50) NULL,
+	quarter varchar(50) NULL,
 	status post_status NOT NULL,
 	rating int4 NULL DEFAULT 5,
 	useremail varchar(100) NOT NULL,

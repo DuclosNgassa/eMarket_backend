@@ -4,7 +4,7 @@ const Op = require('../databases/database').Op;
 
 //Insert Post
 exports.create = async function (req, res, next) {
-    const {title, created_at, updated_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number} = req.body;
+    const {title, created_at, updated_at, post_typ, description, fee, fee_typ, city, quarter, status, rating, useremail, categorieid, phone_number} = req.body;
     try {
         let newPost = await Post.create({
             title,
@@ -15,7 +15,7 @@ exports.create = async function (req, res, next) {
             fee,
             fee_typ,
             city,
-            quartier,
+            quarter,
             status: "active",
             rating: 5,
             useremail,
@@ -23,7 +23,7 @@ exports.create = async function (req, res, next) {
             phone_number,
             count_view: 0
         }, {
-            fields: ["title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"]
+            fields: ["title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quarter", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"]
         });
         if (newPost) {
             res.send({
@@ -50,7 +50,7 @@ exports.create = async function (req, res, next) {
 exports.readAll = async function (req, res, next) {
     try {
         await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quarter", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
         }).then(posts => {
             res.json({
                 result: 'ok',
@@ -73,7 +73,7 @@ exports.readAll = async function (req, res, next) {
 exports.readAllActive = async function (req, res, next) {
     try {
         await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quarter", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
 
             where: {
                 status: 'active'
@@ -101,7 +101,7 @@ exports.readAllActive = async function (req, res, next) {
 exports.readAllCreated = async function (req, res, next) {
     try {
         await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quarter", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
 
             where: {
                 status: 'created'
@@ -129,7 +129,7 @@ exports.readAllCreated = async function (req, res, next) {
 exports.readAllDeleted = async function (req, res, next) {
     try {
         await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quarter", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
 
             where: {
                 status: 'deleted'
@@ -158,7 +158,7 @@ exports.readAllDeleted = async function (req, res, next) {
 exports.readAllArchivated = async function (req, res, next) {
     try {
         await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quarter", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
 
             where: {
                 status: 'archivated'
@@ -187,7 +187,7 @@ exports.findById = async function (req, res, next) {
     const {id} = req.params;
     try {
         await Post.findOne({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quarter", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
             where: {
                 id: id
             },
@@ -212,7 +212,7 @@ exports.findByUsermail = async function (req, res, next) {
     const {useremail} = req.params;
     try {
         await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quarter", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
             where: {
                 useremail: useremail,
                 status: {
@@ -240,7 +240,7 @@ exports.findByCategorieId = async function (req, res, next) {
     const {categorieid} = req.params;
     try {
         await Post.findAll({
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quarter", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
             where: {
                 categorieid: categorieid,
                 status: {
@@ -266,11 +266,11 @@ exports.findByCategorieId = async function (req, res, next) {
 //Update Post
 exports.update = async function (req, res, next) {
     const {id} = req.params;
-    const {title, created_at, updated_at, post_typ, description, fee, fee_typ, city, quartier, status, rating, useremail, categorieid, phone_number, count_view} = req.body;
+    const {title, created_at, updated_at, post_typ, description, fee, fee_typ, city, quarter, status, rating, useremail, categorieid, phone_number, count_view} = req.body;
     try {
         await Post.findOne({
             where: {id: id},
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quarter", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
         }).then(async post => {
             await post.update({
                 title: title ? title : post.title,
@@ -281,7 +281,7 @@ exports.update = async function (req, res, next) {
                 fee: fee ? fee : post.fee,
                 fee_typ: fee_typ ? fee_typ : post.fee_typ,
                 city: city ? city : post.city,
-                quartier: quartier ? quartier : post.quartier,
+                quarter: quarter ? quarter : post.quarter,
                 status: status ? status : post.status,
                 rating: rating ? rating : post.rating,
                 useremail: useremail ? useremail : post.useremail,
@@ -312,7 +312,7 @@ exports.updateViewCount = async function (req, res, next) {
     try {
         await Post.findOne({
             where: {id: id},
-            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quartier", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
+            attributes: ["id", "title", "created_at", "updated_at", "post_typ", "description", "fee", "fee_typ", "city", "quarter", "status", "rating", "useremail", "categorieid", "phone_number", "count_view"],
         }).then(async post => {
             console.log('PostView: ' + JSON.stringify(post));
 
@@ -326,7 +326,7 @@ exports.updateViewCount = async function (req, res, next) {
                 fee: post.fee,
                 fee_typ: post.fee_typ,
                 city: post.city,
-                quartier: post.quartier,
+                quarter: post.quarter,
                 status: post.status,
                 rating: post.rating,
                 useremail: post.useremail,
