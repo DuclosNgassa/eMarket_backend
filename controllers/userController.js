@@ -203,7 +203,7 @@ exports.findbyDeviceToken = async function (req, res, next) {
 //Update User
 exports.update = async function (req, res, next) {
     const {id} = req.params;
-    const {name, email, phone_number, device_token, created_at, rating, user_status} = req.body;
+    const {name, email, phone_number, device_token, deviceid, created_at, rating, user_status} = req.body;
     try {
         await User.findOne({
             attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'deviceid', 'created_at', 'rating', 'user_status'],
