@@ -24,6 +24,9 @@ const User = sequelize.define('users', {
     device_token: {
         type: Sequelize.STRING(200),
     },
+    deviceid: {
+        type: Sequelize.STRING(255),
+    },
     created_at: {
         type: Sequelize.DATE
     },
