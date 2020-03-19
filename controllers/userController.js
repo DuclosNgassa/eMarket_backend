@@ -3,18 +3,19 @@ const auth = require('../controllers/authenticationController');
 
 //Insert User
 exports.create = async function (req, res, next) {
-    const {name, email, phone_number, device_token, created_at, rating, user_status} = req.body;
+    const {name, email, phone_number, device_token, deviceid, created_at, rating, user_status} = req.body;
     try {
         let newUser = await User.create({
             name,
             email,
             phone_number,
             device_token,
+            deviceid,
             created_at,
             rating: 5,
             user_status: 'active'
         }, {
-            fields: ["name", "email", "phone_number", "device_token", "created_at", "rating", "user_status"]
+            fields: ["name", "email", "phone_number", "device_token", "deviceid", "created_at", "rating", "user_status"]
         });
         if (newUser) {
             //Create a Token
@@ -45,7 +46,7 @@ exports.create = async function (req, res, next) {
 exports.readAll = async function (req, res, next) {
     try {
         await User.findAll({
-            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'created_at', 'rating', 'user_status'],
+            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'deviceid', 'created_at', 'rating', 'user_status'],
         }).then(users => {
             res.json({
                 result: 'ok',
@@ -68,7 +69,7 @@ exports.readAll = async function (req, res, next) {
 exports.readAllActive = async function (req, res, next) {
     try {
         await User.findAll({
-            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'created_at', 'rating', 'user_status'],
+            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'deviceid', 'created_at', 'rating', 'user_status'],
             where: {
                 user_status: 'active'
             }
@@ -94,7 +95,7 @@ exports.readAllActive = async function (req, res, next) {
 exports.readAllBlocked = async function (req, res, next) {
     try {
         await User.findAll({
-            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'created_at', 'rating', 'user_status'],
+            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'deviceid', 'created_at', 'rating', 'user_status'],
             where: {
                 user_status: 'blocked'
             }
@@ -121,7 +122,7 @@ exports.findById = async function (req, res, next) {
     const {id} = req.params;
     try {
         await User.findOne({
-            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'created_at', 'rating', 'user_status'],
+            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'deviceid', 'created_at', 'rating', 'user_status'],
             where: {
                 id: id
             },
@@ -145,7 +146,7 @@ exports.findbyEmail = async function (req, res, next) {
     const {email} = req.params;
     try {
         await User.findOne({
-            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'created_at', 'rating', 'user_status'],
+            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'deviceid', 'created_at', 'rating', 'user_status'],
             where: {
                 email: email
             },
@@ -179,7 +180,7 @@ exports.findbyDeviceToken = async function (req, res, next) {
     const {device_token} = req.params;
     try {
         await User.findOne({
-            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'created_at', 'rating', 'user_status'],
+            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'deviceid', 'created_at', 'rating', 'user_status'],
             where: {
                 device_token: device_token
             },
@@ -205,7 +206,7 @@ exports.update = async function (req, res, next) {
     const {name, email, phone_number, device_token, created_at, rating, user_status} = req.body;
     try {
         await User.findOne({
-            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'created_at', 'rating', 'user_status'],
+            attributes: ['id', 'name', 'email', 'phone_number', 'device_token', 'deviceid', 'created_at', 'rating', 'user_status'],
             where: {
                 id
             }
@@ -215,6 +216,7 @@ exports.update = async function (req, res, next) {
                 email: email ? email : user.email,
                 phone_number: phone_number ? phone_number : user.phone_number,
                 device_token: device_token ? device_token : user.device_token,
+                deviceid: deviceid ? deviceid : user.deviceid,
                 created_at: created_at ? created_at : user.created_at,
                 rating: rating ? rating : user.rating,
                 user_status: user_status ? user_status : user.user_status,
